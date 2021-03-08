@@ -19,44 +19,19 @@
   3. This notice may not be removed or altered from any source distribution.
 -------------------------------------------------------------------------------
 */
-#ifndef _Application_h_
-#define _Application_h_
+#ifndef _HighScores_h_
+#define _HighScores_h_
 
-#include "Resources.h"
-#include "Utils/skString.h"
-#include "Window/skWindowHandler.h"
+#include "State.h"
 
-class AppPrivate;
-
-class Application : public skWindowHandler
+class HighScores : public State
 {
-private:
-    friend class AppPrivate;
-
-    skKeyboard*  m_key;
-    skMouse*     m_mouse;
-    GameManager* m_manager;
-    skString     m_programDir;
-    AppPrivate*  m_private;
-
-    UserSettings m_settings;
-
-    void initialize(skWindow* win);
-
-    void handle(const skEventType& evt, skWindow* caller) override;
-
-    void loadSettings();
-    void saveSettings();
-
 public:
-    Application();
+    HighScores(GameManager* owner);
 
-    ~Application() override;
+    void update() override;
 
-    int parseCommandLine(int argc, char** argv);
-
-    
-    int run();
+    void handle(const skEventType& evt) override;
 };
 
-#endif  //_Application_h_
+#endif  //_HighScores_h_

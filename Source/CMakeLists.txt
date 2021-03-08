@@ -22,13 +22,37 @@ set(TargetName_RES Resource/AppIcon.rc)
 
 set(Tetris_SRC 
     Application.h
+    Board.h
+    Game.h
+    GameManager.h
+    GameOver.h
+    HighScores.h
+    MainMenu.h
+    Piece.h
+    RenderUtils.h
+    Resources.h
+    Settings.h
+    Splash.h
+    State.h
+    
     Application.cpp
-    Main.cpp
+    Board.cpp
+    Game.cpp
+    GameManager.cpp
+    GameOver.cpp
+    HighScores.cpp
+    MainMenu.cpp
+    Piece.cpp
+    RenderUtils.cpp
+    Resources.cpp
+    Settings.cpp
+    Splash.cpp
+    State.cpp
     ${TargetName_RES}
 )
 
-#set(Tetris_INC .)
-#set(Tetris_LIB ws2_32)
-
+set(Tetris_DAT
+    Content/Orbitron-SemiBold.ttf
+)
 
 add_application(Tetris)

@@ -19,44 +19,39 @@
   3. This notice may not be removed or altered from any source distribution.
 -------------------------------------------------------------------------------
 */
-#ifndef _Application_h_
-#define _Application_h_
+#include "HighScores.h"
+#include "GameManager.h"
+#include "RenderUtils.h"
+#include "Window/skKeyboard.h"
 
-#include "Resources.h"
-#include "Utils/skString.h"
-#include "Window/skWindowHandler.h"
+using R = Resources;
 
-class AppPrivate;
-
-class Application : public skWindowHandler
+HighScores::HighScores(GameManager* owner) :
+    State(owner)
 {
-private:
-    friend class AppPrivate;
+}
 
-    skKeyboard*  m_key;
-    skMouse*     m_mouse;
-    GameManager* m_manager;
-    skString     m_programDir;
-    AppPrivate*  m_private;
+void HighScores::handle(const skEventType& evt)
+{
+    if (evt == SK_KEY_PRESSED)
+    {
+        switch (getKey())
+        {
+        case KC_SPACE:
+        case KC_RET:
+            popState();
+            break;
+        default:
+            break;
+        }
+    }
+}
 
-    UserSettings m_settings;
-
-    void initialize(skWindow* win);
-
-    void handle(const skEventType& evt, skWindow* caller) override;
-
-    void loadSettings();
-    void saveSettings();
-
-public:
-    Application();
-
-    ~Application() override;
-
-    int parseCommandLine(int argc, char** argv);
-
-    
-    int run();
-};
-
-#endif  //_Application_h_
+void HighScores::update()
+{
+    skClearColor1i(R::Background);
+    skProjectContext(SK_STANDARD);
+    skClearContext();
+    RU::displayBlockArt(R::GameBackground, true);
+    RU::displayDropShadow(R::getSingleton(), 20, 20, R::HighScores);
+}

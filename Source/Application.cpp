@@ -20,31 +20,78 @@
 -------------------------------------------------------------------------------
 */
 #include "Application.h"
+#include "GameManager.h"
 #include "Graphics/skGraphics.h"
+#include "Json/skJsonParser.h"
+#include "Json/skJsonVisitor.h"
+#include "Utils/CommandLine/skCommandLineParser.h"
 #include "Utils/skDisableWarnings.h"
+#include "Utils/skLogger.h"
+#include "Utils/skRandom.h"
 #include "Window/skKeyboard.h"
 #include "Window/skWindow.h"
 #include "Window/skWindowHandler.h"
 
+using namespace skCommandLine;
 
-Application::Application()
+enum SwitchIds
 {
-    m_window = nullptr;
-    m_key    = nullptr;
-    m_mouse  = nullptr;
+    TETRIS_WIN_SIZE = 0,
+    TETRIS_MAX
+};
+
+const Switch Switches[TETRIS_MAX] = {
+    {
+        TETRIS_WIN_SIZE,
+        'w',
+        "window",
+        "Specify the window width and height.\n"
+        "  - Arguments: [width, height]\n"
+        "    - Width  [200 - 7680]\n"
+        "    - Height [100 - 4320]\n",
+        true,
+        2,
+    },
+};
+
+class AppPrivate : public skJsonVisitor
+{
+private:
+    Application* m_parent;
+
+public:
+    AppPrivate(Application* parent) :
+        m_parent(parent)
+    {
+    }
+    ~AppPrivate() override = default;
+
+    void keyValueParsed(const skString&        key,
+                        const skJsonTokenType& valueType,
+                        const skString&        value) override
+    {
+        if (key.equals("width"))
+            m_parent->m_settings.width = (SKint16)skStringConverter::toInt(value, 800);
+        else if (key.equals("height"))
+            m_parent->m_settings.height = (SKint16)skStringConverter::toInt(value, 600);
+        else if (key.equals("type"))
+            m_parent->m_settings.gridType = (SKint16)skStringConverter::toInt(value, 0);
+    }
+};
+
+Application::Application() :
+    m_key(nullptr),
+    m_mouse(nullptr),
+    m_manager(nullptr),
+    m_settings({800, 600, 0})
+{
+    m_private = new AppPrivate(this);
 }
 
 Application::~Application()
 {
+    delete m_private;
     skDeleteContext(skGetCurrentContext());
-}
-
-void Application::handleKey(skWindow* window) const
-{
-    bool handled = false;
-
-    if (handled)
-        window->refresh();
 }
 
 void Application::initialize(skWindow* win)
@@ -57,18 +104,16 @@ void Application::handle(const skEventType& evt, skWindow* caller)
 {
     switch (evt)
     {
-    case SK_KEY_PRESSED:
-        handleKey(caller);
-        break;
-    case SK_MOUSE_RELEASED:
-        break;
-    case SK_WIN_PAINT:
-        redraw();
-        caller->flush();
-        break;
     case SK_WIN_SIZE:
+        skSetContext2i(SK_CONTEXT_SIZE, caller->getWidth(), caller->getHeight());
         caller->refresh();
         break;
+    case SK_WIN_PAINT:
+        m_manager->update();
+        caller->flush();
+        break;
+    case SK_KEY_PRESSED:
+    case SK_MOUSE_RELEASED:
     case SK_MOUSE_MOVED:
     case SK_WIN_EVT_UNKNOWN:
     case SK_WIN_DESTROY:
@@ -77,32 +122,100 @@ void Application::handle(const skEventType& evt, skWindow* caller)
     case SK_MOUSE_WHEEL:
     case SK_WIN_SHOWN:
     case SK_WIN_HIDDEN:
+        m_manager->handle(evt);
         break;
     }
 }
 
-
-void Application::redraw()
-{
-    skClearContext();
-}
-
 int Application::parseCommandLine(int argc, char** argv)
 {
+    Parser p;
+    if (p.parse(argc, argv, Switches, TETRIS_MAX) < 0)
+        return 1;
+
+    if (p.isPresent(TETRIS_WIN_SIZE))
+    {
+        m_settings.width  = (SKuint16)p.getValueInt(TETRIS_WIN_SIZE, 0, 800);
+        m_settings.height = (SKuint16)p.getValueInt(TETRIS_WIN_SIZE, 1, 600);
+    }
+
+    m_programDir = p.getProgramDirectory();
+
+    loadSettings();
+
     return 0;
 }
+
+void Application::loadSettings()
+{
+    skJsonParser parser(m_private);
+    parser.parse(m_programDir + "settings.json");
+
+    m_settings.width    = skClamp<SKint32>(m_settings.width, 200, 7680);
+    m_settings.height   = skClamp<SKint32>(m_settings.height, 100, 4320);
+    m_settings.gridType = skClamp<SKint32>(m_settings.gridType, 0, 5);
+}
+
+void Application::saveSettings()
+{
+    // create a skJsonPrinter;
+}
+
+
 
 
 int Application::run()
 {
-    skWindowManager mgr(WM_CTX_SDL);
-    mgr.addHandler(this);
+    Resources* resource = new Resources();
+    skRandInit();
 
-    skWindow* win = mgr.create("Tetris", 800, 600, WM_WF_SHOW_CENT_DIA);
-    skNewContext();
-    skProjectContext(SK_STANDARD);
-    initialize(win);
-    mgr.broadcastEvent(SK_WIN_SIZE);
-    mgr.process();
+    skWindowManager mgr(WM_CTX_SDL, this);
+
+    skWindow* win = mgr.create("Tetris",
+                               m_settings.width,
+                               m_settings.height,
+                               WM_WF_SHOW_CENT_DIA);
+
+    m_manager = new GameManager(win);
+    m_manager->setSettings(m_settings);
+
+    // Broadcast a size message so that handlers
+    // can update rectangles appropriately.
+    mgr.dispatchInitialEvents();
+
+    while (mgr.processInteractive(true))
+    {
+        if (m_manager->hasOrphanedStates())
+            m_manager->destroyOrphanedStates();
+    }
+
+
+    saveSettings();
+
+    delete resource;
+
+    delete m_manager;
     return 0;
+}
+
+int main(int argc, char** argv)
+{
+    skLogger log;
+    log.setFlags(LF_STDOUT | LF_FILE | LF_TIMESTAMP | LF_DETAIL);
+    log.open("Tetris.log");
+
+    try
+    {
+        Application app;
+        if (app.parseCommandLine(argc, argv) != 0)
+            return 1;
+
+        return app.run();
+    }
+    catch (...)
+    {
+        skLogd(LD_ERROR, "An unknown exception occurred\n");
+    }
+
+    return 1;
 }

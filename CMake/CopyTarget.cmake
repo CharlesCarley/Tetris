@@ -1,4 +1,20 @@
 
+macro(copy_content TARNAME DESTDIR)
+    
+    foreach(it ${ARGN})
+        
+        get_filename_component(INFILE ${it} ABSOLUTE)
+        get_filename_component(OUTFILE ${it} NAME)
+        get_filename_component(DIR ${DESTDIR} ABSOLUTE )
+
+        add_custom_command(TARGET ${TARNAME} 
+                            POST_BUILD
+                            COMMAND ${CMAKE_COMMAND} -E copy_if_different  ${INFILE} 
+                            "${DIR}/Content/${OUTFILE}"
+                            )
+    endforeach()
+
+endmacro()
 
 
 macro(copy_target TARNAME DESTDIR)

@@ -45,6 +45,26 @@ macro(add_application TARGETNAME)
     if (${TARGETNAME}_COPY_BIN) 
     
         copy_target(${TARGETNAME} ${CMAKE_SOURCE_DIR}/Bin) 
+        copy_content(${TARGETNAME} ${CMAKE_SOURCE_DIR}/Bin ${${TARGETNAME}_DAT})
 
+        if (MSVC)
+            set_target_properties(
+                ${TARGETNAME} 
+                PROPERTIES 
+                VS_DEBUGGER_WORKING_DIRECTORY  
+                ${CMAKE_SOURCE_DIR}/Bin
+            )
+        endif()
+    else()
+        if (MSVC)
+            set_target_properties(
+                ${TARGETNAME} 
+                PROPERTIES 
+                VS_DEBUGGER_WORKING_DIRECTORY  
+                ${CMAKE_CURRENT_SOURCE_DIR}
+            )
+        endif()
     endif()
+
+
 endmacro()

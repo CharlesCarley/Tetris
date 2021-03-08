@@ -19,44 +19,25 @@
   3. This notice may not be removed or altered from any source distribution.
 -------------------------------------------------------------------------------
 */
-#ifndef _Application_h_
-#define _Application_h_
+#ifndef _Splash_h_
+#define _Splash_h_
 
-#include "Resources.h"
-#include "Utils/skString.h"
-#include "Window/skWindowHandler.h"
+#include "State.h"
+#include "Threads/skTimedCallback.h"
 
-class AppPrivate;
-
-class Application : public skWindowHandler
+class Splash : public State
 {
-private:
-    friend class AppPrivate;
-
-    skKeyboard*  m_key;
-    skMouse*     m_mouse;
-    GameManager* m_manager;
-    skString     m_programDir;
-    AppPrivate*  m_private;
-
-    UserSettings m_settings;
-
-    void initialize(skWindow* win);
-
-    void handle(const skEventType& evt, skWindow* caller) override;
-
-    void loadSettings();
-    void saveSettings();
 
 public:
-    Application();
+    Splash(GameManager* owner);
+    virtual ~Splash() override;
 
-    ~Application() override;
+    void update() override;
 
-    int parseCommandLine(int argc, char** argv);
+    void handle(const skEventType& evt) override;
 
-    
-    int run();
+    bool overrideDefaultState() override { return true; }
 };
 
-#endif  //_Application_h_
+
+#endif  //_Splash_h_

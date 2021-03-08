@@ -19,44 +19,57 @@
   3. This notice may not be removed or altered from any source distribution.
 -------------------------------------------------------------------------------
 */
-#ifndef _Application_h_
-#define _Application_h_
+#ifndef _State_h_
+#define _State_h_
 
+#include "Math/skVector2.h"
 #include "Resources.h"
-#include "Utils/skString.h"
+#include "Utils/skDisableWarnings.h"
 #include "Window/skWindowHandler.h"
 
-class AppPrivate;
-
-class Application : public skWindowHandler
+class State
 {
-private:
-    friend class AppPrivate;
-
-    skKeyboard*  m_key;
-    skMouse*     m_mouse;
-    GameManager* m_manager;
-    skString     m_programDir;
-    AppPrivate*  m_private;
-
-    UserSettings m_settings;
-
-    void initialize(skWindow* win);
-
-    void handle(const skEventType& evt, skWindow* caller) override;
-
-    void loadSettings();
-    void saveSettings();
+protected:
+    GameManager* m_owner;
 
 public:
-    Application();
+    State(GameManager* owner);
 
-    ~Application() override;
+    virtual ~State();
 
-    int parseCommandLine(int argc, char** argv);
+    skVector2 getMouseCo() const;
 
     
-    int run();
+    SKint32 getKey() const;
+
+    void refresh() const;
+
+    void close();
+    
+
+    void pushState(State* newState) const;
+
+    void popState() const;
+
+    void popAndSaveState() const;
+
+    virtual void initialize() {}
+
+    virtual void finalize() {}
+
+    virtual void preUpdate() {}
+
+    virtual void update() {}
+
+    virtual void postUpdate() {}
+
+    virtual void onPush() {}
+
+    virtual void onPop() {}
+
+    virtual void handle(const skEventType& evt) {}
+
+    virtual bool overrideDefaultState() { return false; }
 };
 
-#endif  //_Application_h_
+#endif  //_State_h_

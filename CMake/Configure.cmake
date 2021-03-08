@@ -25,15 +25,23 @@ set_static_runtime()
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 option(Tetris_COPY_BIN            "Copy binary to the bin directory." ON)
-option(Tetris_BACKEND_OPENGL      "Build the OpenGL backend." ON)
 option(Tetris_USE_SDL             "Build with SDL" OFF)
-option(Tetris_NO_PALETTE          "Disable builtin palette" OFF)
 option(Tetris_OP_CHECKS           "Check function parameters" ON)
-option(Tetris_EXTRA_BUILTIN_FONTS "Include extra fonts in the build. https://fonts.google.com/" OFF)
+option(Tetris_BACKEND_OPENGL      "Build the OpenGL backend." ON)
+option(Tetris_NO_PALETTE          "Disable builtin palette" OFF)
+option(Tetris_EXTRA_BUILTIN_FONTS "Include extra fonts in the build. https://fonts.google.com/" ON)
+
+option(Tetris_BUILD_TEST          "Build the Tetris test program." ON)
+option(Tetris_AUTO_RUN_TEST       "Run the test program after a successful build." OFF)
 
 if (WIN32)
     option(Tetris_WIN_MAIN "Wrap main function for WinMain." ON)
     set(Window_DEFINE_WINMAIN ${Tetris_WIN_MAIN} CACHE BOOL "" FORCE)
+endif()
+
+if(Tetris_BUILD_TEST)
+    set(Tetris_NO_PALETTE          OFF CACHE BOOL "" FORCE)
+    set(Tetris_EXTRA_BUILTIN_FONTS ON  CACHE BOOL "" FORCE)
 endif()
   
 set(Window_WITH_SDL               ${Tetris_USE_SDL}             CACHE BOOL "" FORCE)
@@ -43,12 +51,11 @@ set(Graphics_OP_CHECKS            ${Tetris_OP_CHECKS}           CACHE BOOL "" FO
 set(Graphics_EXTRA_BUILTIN_FONTS  ${Tetris_EXTRA_BUILTIN_FONTS} CACHE BOOL "" FORCE)
 set(Graphics_BACKEND_OPENGL       ${Tetris_BACKEND_OPENGL}      CACHE BOOL "" FORCE)
 
-
-
-
 set(FreeImage_SILENT TRUE)
 set(Tetris_SILENT TRUE)
 
+set(GTEST_INCLUDE ${Tetris_SOURCE_DIR}/Test/googletest/googletest/include)
+set(GTEST_LIBRARY gtest_main)
 
 # Define the extern path relative to 
 # the Tetris source directory
@@ -61,6 +68,8 @@ DefineExternalTarget(FreeType      Extern "${Extern}/FreeType/Source/2.10.4/incl
 DefineExternalTarget(FreeImage     Extern "${Extern}/FreeImage/Source")
 DefineExternalTarget(Image         Extern "${Extern}/Image")
 DefineExternalTarget(Graphics      Extern "${Extern}/Graphics")
+DefineExternalTarget(Threads       Extern "${Extern}/Threads")
+DefineExternalTarget(Json          Extern "${Extern}/Json")
 
 if (Tetris_USE_SDL AND Tetris_BACKEND_OPENGL)
     set(SDL_FOLDER Extern)
@@ -85,6 +94,8 @@ set(Graphics_INCLUDE
     ${Math_INCLUDE} 
     ${Window_INCLUDE} 
     ${Image_INCLUDE} 
+    ${Threads_INCLUDE} 
+    ${Json_INCLUDE} 
     ${FreeType_INCLUDE} 
     ${FreeImage_INCLUDE} 
     ${SDL_INCLUDE}
@@ -96,6 +107,8 @@ set(Graphics_LIBRARY
     ${Math_LIBRARY} 
     ${Window_LIBRARY} 
     ${Image_LIBRARY} 
+    ${Threads_LIBRARY} 
+    ${Json_LIBRARY} 
     ${FreeType_LIBRARY} 
     ${FreeImage_LIBRARY}
     ${SDL_LIBRARY}

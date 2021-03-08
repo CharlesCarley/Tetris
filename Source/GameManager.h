@@ -19,44 +19,67 @@
   3. This notice may not be removed or altered from any source distribution.
 -------------------------------------------------------------------------------
 */
-#ifndef _Application_h_
-#define _Application_h_
+#ifndef _GameManager_h_
+#define _GameManager_h_
 
 #include "Resources.h"
-#include "Utils/skString.h"
-#include "Window/skWindowHandler.h"
+#include "Utils/skArray.h"
+#include "Utils/skStack.h"
+#include "Window/skWindow.h"
 
-class AppPrivate;
-
-class Application : public skWindowHandler
+class GameManager
 {
+public:
+    typedef skArray<State*> StateArray;
+    typedef skStack<State*> NavigationStack;
+
 private:
-    friend class AppPrivate;
+    SKcontext       m_context;
+    State*          m_cBlock;
+    skWindow*       m_window;
+    StateArray      m_orphanedStates;
+    NavigationStack m_stack;
+    UserSettings    m_settings;
 
-    skKeyboard*  m_key;
-    skMouse*     m_mouse;
-    GameManager* m_manager;
-    skString     m_programDir;
-    AppPrivate*  m_private;
+    void initialize();
 
-    UserSettings m_settings;
-
-    void initialize(skWindow* win);
-
-    void handle(const skEventType& evt, skWindow* caller) override;
-
-    void loadSettings();
-    void saveSettings();
+    void finalize();
 
 public:
-    Application();
+    explicit GameManager(skWindow* window);
+    ~GameManager();
 
-    ~Application() override;
+    void detachFromWindow();
 
-    int parseCommandLine(int argc, char** argv);
+    void update() const;
 
-    
-    int run();
+    void pushState(State* state);
+
+    void popState();
+
+    void handle(const skEventType& evt);
+
+    void destroyOrphanedStates();
+
+    bool hasOrphanedStates() const
+    {
+        return !m_orphanedStates.empty();
+    }
+
+    skWindow* getWindow() const
+    {
+        return m_window;
+    }
+
+    void setSettings(const UserSettings& settings)
+    {
+        m_settings = settings;
+    }
+
+    UserSettings& getSettings()
+    {
+        return m_settings;
+    }
 };
 
-#endif  //_Application_h_
+#endif  //_GameManager_h_

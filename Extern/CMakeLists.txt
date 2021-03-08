@@ -23,7 +23,8 @@ subdirs(FreeImage)
 subdirs(Utils)
 subdirs(Math)
 subdirs(Image)
-
+subdirs(Threads)
+subdirs(Json)
 
 if(Tetris_BACKEND_OPENGL)
     if (Graphics_USE_SDL)

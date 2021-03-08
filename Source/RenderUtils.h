@@ -19,44 +19,36 @@
   3. This notice may not be removed or altered from any source distribution.
 -------------------------------------------------------------------------------
 */
-#ifndef _Application_h_
-#define _Application_h_
+#ifndef _RenderUtils_h_
+#define _RenderUtils_h_
 
 #include "Resources.h"
+#include "Math/skRectangle.h"
 #include "Utils/skString.h"
-#include "Window/skWindowHandler.h"
 
-class AppPrivate;
-
-class Application : public skWindowHandler
+class RenderUtils
 {
-private:
-    friend class AppPrivate;
-
-    skKeyboard*  m_key;
-    skMouse*     m_mouse;
-    GameManager* m_manager;
-    skString     m_programDir;
-    AppPrivate*  m_private;
-
-    UserSettings m_settings;
-
-    void initialize(skWindow* win);
-
-    void handle(const skEventType& evt, skWindow* caller) override;
-
-    void loadSettings();
-    void saveSettings();
-
 public:
-    Application();
+    static void getTextRect(const Resources& R, skRectangle& dest, const StaticString& text);
 
-    ~Application() override;
+    static void displayString(const Resources& R, skScalar x, skScalar y, const StaticString& text);
+    static void displayStringSm(const Resources& R, skScalar x, skScalar y, const StaticString& text);
 
-    int parseCommandLine(int argc, char** argv);
+    static void displayDropShadow(const Resources& R, skScalar x, skScalar y, const StaticString& text);
 
-    
-    int run();
+    static void displayDropShadow(const Resources& R, skScalar x, skScalar y, const skString& text);
+
+    static void clear();
+
+    static void setColorFromEnum(const SKuint8& col);
+
+    static void displayBlock(const SKuint8& col, skScalar x, skScalar y, skScalar size, const skScalar shadowDist=3.33333f);
+
+    static void displayGrayedBlock(const SKuint8& col, skScalar x, skScalar y, skScalar size, const skScalar shadowDist = 3.33333f);
+
+    static void displayBlockArt(const BlockArt &block, bool grey=false, skScalar opacity=1.f);
 };
 
-#endif  //_Application_h_
+using RU = RenderUtils;
+
+#endif  //_RenderUtils_h_

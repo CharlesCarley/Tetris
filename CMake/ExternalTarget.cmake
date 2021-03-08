@@ -30,3 +30,12 @@ macro(DefineExternalTarget NAME GROUP INCLUDE )
     set(${NAME}_LIBRARY             ${${NAME}_TargetName})
 endmacro()
 
+
+
+macro(add_external_test NAME DIR )
+    unset(${NAME}Test)
+    unset(TargetName )
+
+    set(TargetName ${NAME})
+    subdirs("Extern/${NAME}/${DIR}")
+endmacro()

@@ -19,27 +19,41 @@
   3. This notice may not be removed or altered from any source distribution.
 -------------------------------------------------------------------------------
 */
-#include "Application.h"
-#include "Graphics/skGraphics.h"
-#include "Math/skColor.h"
-#include "Utils/skLogger.h"
+#ifndef _MainMenu_h_
+#define _MainMenu_h_
 
-int main(int argc, char** argv)
+#include "Math/skRectangle.h"
+
+#include "State.h"
+
+
+class MainMenu : public State
 {
-    try
-    {
-        skLogger log;
-        log.setFlags(LF_STDOUT | LF_FILE);
-        log.open("Tetris.log");
+private:
+    skRectangle m_ngRect;
+    skRectangle m_stRect;
+    skRectangle m_hsRect;
+    skRectangle m_exRect;
+    SKint32     m_selection;
 
-        Application app;
-        if (app.parseCommandLine(argc, argv) != 0)
-            return 1;
-        return app.run();
-    }
-    catch (...)
-    {
-    }
+    void handle(const skEventType& evt) override;
 
-    return 1;
-}
+    bool handleKey();
+
+    int testOption() const;
+
+    void pushOption(int opt);
+
+    void preUpdate() override;
+
+    void onPush() override;
+
+public:
+    MainMenu(GameManager* owner);
+
+    void initialize() override;
+
+    void update() override;
+};
+
+#endif  //_MainMenu_h_

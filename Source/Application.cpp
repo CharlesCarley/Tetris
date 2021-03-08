@@ -71,11 +71,11 @@ public:
                         const skString&        value) override
     {
         if (key.equals("width"))
-            m_parent->m_settings.width = (SKint16)skStringConverter::toInt(value, 800);
+            m_parent->m_settings.width = value.toInt32();
         else if (key.equals("height"))
-            m_parent->m_settings.height = (SKint16)skStringConverter::toInt(value, 600);
+            m_parent->m_settings.height = value.toInt32();
         else if (key.equals("type"))
-            m_parent->m_settings.gridType = (SKint16)skStringConverter::toInt(value, 0);
+            m_parent->m_settings.gridType = value.toInt32();
     }
 };
 
@@ -140,9 +140,7 @@ int Application::parseCommandLine(int argc, char** argv)
     }
 
     m_programDir = p.getProgramDirectory();
-
     loadSettings();
-
     return 0;
 }
 

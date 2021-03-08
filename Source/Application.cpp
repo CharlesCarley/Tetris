@@ -22,7 +22,9 @@
 #include "Application.h"
 #include "GameManager.h"
 #include "Graphics/skGraphics.h"
+#include "Json/skJsonObject.h"
 #include "Json/skJsonParser.h"
+#include "Json/skJsonPrinter.h"
 #include "Json/skJsonVisitor.h"
 #include "Utils/CommandLine/skCommandLineParser.h"
 #include "Utils/skDisableWarnings.h"
@@ -156,6 +158,20 @@ void Application::loadSettings()
 
 void Application::saveSettings()
 {
+    m_settings = m_manager->getSettings();
+
+
+
+    skJsonObject obj;
+    obj.insert("width", m_settings.width);
+    obj.insert("height", m_settings.height);
+    obj.insert("type", m_settings.gridType);
+
+    skJsonPrinter output;
+    output.writeToFile(&obj, m_programDir + "settings.json");
+
+
+
     // create a skJsonPrinter;
 }
 

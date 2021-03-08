@@ -36,6 +36,11 @@ macro(add_external_test NAME DIR )
     unset(${NAME}Test)
     unset(TargetName )
 
+    if (Tetris_AUTO_RUN_TEST)
+        set(${NAME}_AUTO_RUN_TEST TRUE)
+        set(${NAME}_AUTO_RUN_TESTS TRUE)
+    endif()
+    
     set(TargetName ${NAME})
     subdirs("Extern/${NAME}/${DIR}")
 endmacro()

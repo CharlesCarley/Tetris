@@ -24,35 +24,35 @@ include(ExternalTarget)
 set_static_runtime()
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
-option(GraphicsTemplate_COPY_BIN            "Copy binary to the bin directory." ON)
-option(GraphicsTemplate_BACKEND_OPENGL      "Build the OpenGL backend." ON)
-option(GraphicsTemplate_USE_SDL             "Build with SDL" OFF)
-option(GraphicsTemplate_NO_PALETTE          "Disable builtin palette" OFF)
-option(GraphicsTemplate_OP_CHECKS           "Check function parameters" ON)
-option(GraphicsTemplate_EXTRA_BUILTIN_FONTS "Include extra fonts in the build. https://fonts.google.com/" OFF)
+option(Tetris_COPY_BIN            "Copy binary to the bin directory." ON)
+option(Tetris_BACKEND_OPENGL      "Build the OpenGL backend." ON)
+option(Tetris_USE_SDL             "Build with SDL" OFF)
+option(Tetris_NO_PALETTE          "Disable builtin palette" OFF)
+option(Tetris_OP_CHECKS           "Check function parameters" ON)
+option(Tetris_EXTRA_BUILTIN_FONTS "Include extra fonts in the build. https://fonts.google.com/" OFF)
 
 if (WIN32)
-    option(GraphicsTemplate_WIN_MAIN "Wrap main function for WinMain." ON)
-    set(Window_DEFINE_WINMAIN ${GraphicsTemplate_WIN_MAIN} CACHE BOOL "" FORCE)
+    option(Tetris_WIN_MAIN "Wrap main function for WinMain." ON)
+    set(Window_DEFINE_WINMAIN ${Tetris_WIN_MAIN} CACHE BOOL "" FORCE)
 endif()
   
-set(Window_WITH_SDL               ${GraphicsTemplate_USE_SDL}             CACHE BOOL "" FORCE)
-set(Graphics_USE_SDL              ${GraphicsTemplate_USE_SDL}             CACHE BOOL "" FORCE)
-set(Graphics_NO_PALETTE           ${GraphicsTemplate_NO_PALETTE}          CACHE BOOL "" FORCE)
-set(Graphics_OP_CHECKS            ${GraphicsTemplate_OP_CHECKS}           CACHE BOOL "" FORCE)
-set(Graphics_EXTRA_BUILTIN_FONTS  ${GraphicsTemplate_EXTRA_BUILTIN_FONTS} CACHE BOOL "" FORCE)
-set(Graphics_BACKEND_OPENGL       ${GraphicsTemplate_BACKEND_OPENGL}      CACHE BOOL "" FORCE)
+set(Window_WITH_SDL               ${Tetris_USE_SDL}             CACHE BOOL "" FORCE)
+set(Graphics_USE_SDL              ${Tetris_USE_SDL}             CACHE BOOL "" FORCE)
+set(Graphics_NO_PALETTE           ${Tetris_NO_PALETTE}          CACHE BOOL "" FORCE)
+set(Graphics_OP_CHECKS            ${Tetris_OP_CHECKS}           CACHE BOOL "" FORCE)
+set(Graphics_EXTRA_BUILTIN_FONTS  ${Tetris_EXTRA_BUILTIN_FONTS} CACHE BOOL "" FORCE)
+set(Graphics_BACKEND_OPENGL       ${Tetris_BACKEND_OPENGL}      CACHE BOOL "" FORCE)
 
 
 
 
 set(FreeImage_SILENT TRUE)
-set(GraphicsTemplate_SILENT TRUE)
+set(Tetris_SILENT TRUE)
 
 
 # Define the extern path relative to 
-# the GraphicsTemplate source directory
-set(Extern ${GraphicsTemplate_SOURCE_DIR}/Extern)
+# the Tetris source directory
+set(Extern ${Tetris_SOURCE_DIR}/Extern)
 
 DefineExternalTarget(Data2Array    Extern "${Extern}/Data2Array")
 DefineExternalTarget(Utils         Extern "${Extern}")
@@ -62,13 +62,13 @@ DefineExternalTarget(FreeImage     Extern "${Extern}/FreeImage/Source")
 DefineExternalTarget(Image         Extern "${Extern}/Image")
 DefineExternalTarget(Graphics      Extern "${Extern}/Graphics")
 
-if (GraphicsTemplate_USE_SDL AND GraphicsTemplate_BACKEND_OPENGL)
+if (Tetris_USE_SDL AND Tetris_BACKEND_OPENGL)
     set(SDL_FOLDER Extern)
     set(SDL_LIBRARY SDL2main SDL2-static)
     set(SDL_INCLUDE ${Extern}/SDL/SDL)
 endif()
 
-if (GraphicsTemplate_BACKEND_OPENGL)
+if (Tetris_BACKEND_OPENGL)
     DefineExternalTarget(Window        Extern "${Extern}/Window")
 
     set(OpenGL_GL_PREFERENCE GLVND)
@@ -80,7 +80,7 @@ endif()
 
 set(Graphics_INCLUDE
     ${Extern}/Graphics/
-    ${GraphicsTemplate_BINARY_DIR}
+    ${Tetris_BINARY_DIR}
     ${Utils_INCLUDE} 
     ${Math_INCLUDE} 
     ${Window_INCLUDE} 

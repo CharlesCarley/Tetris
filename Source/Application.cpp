@@ -98,7 +98,7 @@ int Application::run()
     skWindowManager mgr(WM_CTX_SDL);
     mgr.addHandler(this);
 
-    skWindow* win = mgr.create("GraphicsTemplate", 800, 600, WM_WF_SHOW_CENT_DIA);
+    skWindow* win = mgr.create("Tetris", 800, 600, WM_WF_SHOW_CENT_DIA);
     skNewContext();
     skProjectContext(SK_STANDARD);
     initialize(win);

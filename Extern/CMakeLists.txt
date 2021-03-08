@@ -25,7 +25,7 @@ subdirs(Math)
 subdirs(Image)
 
 
-if(GraphicsTemplate_BACKEND_OPENGL)
+if(Tetris_BACKEND_OPENGL)
     if (Graphics_USE_SDL)
         subdirs(SDL)
     endif()

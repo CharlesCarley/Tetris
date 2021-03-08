@@ -30,7 +30,7 @@ int main(int argc, char** argv)
     {
         skLogger log;
         log.setFlags(LF_STDOUT | LF_FILE);
-        log.open("GraphicsTemplate.log");
+        log.open("Tetris.log");
 
         Application app;
         if (app.parseCommandLine(argc, argv) != 0)

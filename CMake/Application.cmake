@@ -22,7 +22,7 @@ include (CopyTarget)
 
 macro(add_application TARGETNAME)
 
-    if(NOT GraphicsTemplate_SILENT)
+    if(NOT Tetris_SILENT)
         message(STATUS "Configuring: ${TARGETNAME}")
         message(STATUS "${TARGETNAME}_SRC ==> ${${TARGETNAME}_SRC}")
         message(STATUS "${TARGETNAME}_INC ==> ${${TARGETNAME}_INC}")
@@ -30,7 +30,7 @@ macro(add_application TARGETNAME)
     endif()
 
     include_directories(. ${Graphics_INCLUDE} ${${TARGETNAME}_INC})
-    if (GraphicsTemplate_WIN_MAIN)
+    if (Tetris_WIN_MAIN)
         add_executable(${TARGETNAME}  WIN32 ${${TARGETNAME}_SRC})
     else()
         add_executable(${TARGETNAME} ${${TARGETNAME}_SRC})

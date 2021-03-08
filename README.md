@@ -1,4 +1,4 @@
-# GraphicsTemplate
+# Tetris
 
 A sub-module template repository.
 
@@ -106,9 +106,9 @@ Optional defines.
 
 | Option                               | Description                                                    | Default |
 |:-------------------------------------|:---------------------------------------------------------------|:-------:|
-| GraphicsTemplate_COPY_BIN            | Copy binary to the bin directory.                              |   ON    |
-| GraphicsTemplate_BACKEND_OPENGL      | Build the OpenGL backend.                                      |   ON    |
-| GraphicsTemplate_USE_SDL             | Build with SDL.                                                |   OFF   |
-| GraphicsTemplate_NO_PALETTE          | Disable builtin palette.                                       |   OFF   |
-| GraphicsTemplate_OP_CHECKS           | Extra checks on function parameters                            |   ON    |
-| GraphicsTemplate_EXTRA_BUILTIN_FONTS | Include extra [fonts](https://fonts.google.com/) in the build. |   OFF   |
+| Tetris_COPY_BIN            | Copy binary to the bin directory.                              |   ON    |
+| Tetris_BACKEND_OPENGL      | Build the OpenGL backend.                                      |   ON    |
+| Tetris_USE_SDL             | Build with SDL.                                                |   OFF   |
+| Tetris_NO_PALETTE          | Disable builtin palette.                                       |   OFF   |
+| Tetris_OP_CHECKS           | Extra checks on function parameters                            |   ON    |
+| Tetris_EXTRA_BUILTIN_FONTS | Include extra [fonts](https://fonts.google.com/) in the build. |   OFF   |

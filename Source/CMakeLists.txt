@@ -20,15 +20,15 @@
 include(Application)
 set(TargetName_RES Resource/AppIcon.rc)
 
-set(GraphicsTemplate_SRC 
+set(Tetris_SRC 
     Application.h
     Application.cpp
     Main.cpp
     ${TargetName_RES}
 )
 
-#set(GraphicsTemplate_INC .)
-#set(GraphicsTemplate_LIB ws2_32)
+#set(Tetris_INC .)
+#set(Tetris_LIB ws2_32)
 
 
-add_application(GraphicsTemplate)
+add_application(Tetris)

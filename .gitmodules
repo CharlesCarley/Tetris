@@ -1,0 +1,27 @@
+[submodule "Extern/Graphics"]
+	path = Extern/Graphics
+	url = https://github.com/CharlesCarley/Graphics.git
+[submodule "Extern/Utils"]
+	path = Extern/Utils
+	url = https://github.com/CharlesCarley/Utils.git
+[submodule "Extern/Window"]
+	path = Extern/Window
+	url = https://github.com/CharlesCarley/Window.git
+[submodule "Extern/Math"]
+	path = Extern/Math
+	url = https://github.com/CharlesCarley/Math.git
+[submodule "Extern/Image"]
+	path = Extern/Image
+	url = https://github.com/CharlesCarley/Image.git
+[submodule "Extern/FreeImage"]
+	path = Extern/FreeImage
+	url = https://github.com/CharlesCarley/FreeImage.git
+[submodule "Extern/SDL"]
+	path = Extern/SDL
+	url = https://github.com/CharlesCarley/SDL.git
+[submodule "Extern/Data2Array"]
+	path = Extern/Data2Array
+	url = https://github.com/CharlesCarley/Data2Array.git
+[submodule "Extern/FreeType"]
+	path = Extern/FreeType
+	url = https://github.com/CharlesCarley/FreeType.git

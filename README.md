@@ -8,18 +8,18 @@ A Tetris clone written with OpenGL and C++.
 
 ## Controls
 
-| Key              | Description               |
-|:-----------------|:--------------------------|
-| Enter            | Accept/Next state         |
-| Escape/Backspace | Back/Previous state       |
-| Q                | Reset board               |
-| R                | Next piece (Score  - 200) |
-| Space            | Rotate piece              |
-| Left             | Move left                 |
-| Right            | Move right                |
-| Up               | Move up (Score -1)        |
-| Down             | Drop piece                |
-| Number pad (-)   | Skip level                |
+| Key              | Description                                      |
+|:-----------------|:-------------------------------------------------|
+| Enter            | Accept/Next state                                |
+| Escape/Backspace | Back/Previous state                              |
+| Q                | Resets the board.                                |
+| R                | Swaps the current with next piece. (Score - 200) |
+| Space            | Rotates the current piece.                       |
+| Left             | Moves left                                       |
+| Right            | Moves right                                      |
+| Up               | Moves up, but subtracts one from  the score.     |
+| Down             | Drops the current piece.                         |
+| Number pad (-)   | Increments the level.                            |
 
 ## Sub-modules
 
@@ -35,19 +35,19 @@ gitupdate.bat
 
 _*Sub-modules in this project*_
 
-| Name       | Description                                              |
-|------------|----------------------------------------------------------|
-| Utils      | Provides common all around functionality.                |
-| Math       | Math support.                                            |
-| Window     | Window support.                                          |
-| Image      | Image I/O.                                               |
-| Graphics   | 2D Rendering context.                                    |
-| Thread     | Thread support.                                          |
-| Json       | Json  support.                                           |
-| FreeImage  | Support library for Image.                               |
-| FreeType   | Support library for font I/O.                            |
-| SDL        | Optional Backend for the window library.                 |
-| Data2Array | Compile time tool to pack resources into the executable. |
+| Name                                                      | Description                                              |
+|-----------------------------------------------------------|----------------------------------------------------------|
+| [Utils](https://github.com/CharlesCarley/Utils)           | Provides common all around functionality.                |
+| [Math](https://github.com/CharlesCarley/Math)             | Math support.                                            |
+| [Window](https://github.com/CharlesCarley/Window)         | Window support.                                          |
+| [Image](https://github.com/CharlesCarley/Image)           | Image I/O.                                               |
+| [Graphics](https://github.com/CharlesCarley/Graphics)     | 2D Rendering context.                                    |
+| [Thread](https://github.com/CharlesCarley/Threads)        | Thread support.                                          |
+| [Json](https://github.com/CharlesCarley/Json)             | Json  support.                                           |
+| [FreeImage](https://github.com/CharlesCarley/FreeImage)   | Support library for Image.                               |
+| [FreeType](https://github.com/CharlesCarley/FreeType)     | Support library for font I/O.                            |
+| [SDL](https://github.com/CharlesCarley/SDL)               | Optional Backend for the window library.                 |
+| [Data2Array](https://github.com/CharlesCarley/Data2Array) | Compile time tool to pack resources into the executable. |
 
 ## Building
 
@@ -72,9 +72,6 @@ Optional defines.
 | Tetris_OP_CHECKS           | Extra checks on function parameters                            |   ON    |
 | Tetris_EXTRA_BUILTIN_FONTS | Include extra [fonts](https://fonts.google.com/) in the build. |   OFF   |
 
-
 ## References
 
 The initial starter tutorial that was used can be found [here](https://javilop.com/gamedev/tetris-tutorial-in-c-platform-independent-focused-in-game-logic-for-beginners/)
-
-

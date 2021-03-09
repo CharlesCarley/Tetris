@@ -104,7 +104,6 @@ void GameManager::mergeScore(SKint32 score)
                 break;
             }
         }
-        
     }
 
     sortScore();

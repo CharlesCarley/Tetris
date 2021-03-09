@@ -82,7 +82,7 @@ void Board::initialize(SKint32 type)
     selectRandom(m_nBlock);
 }
 
-inline SKint32 Board::GetIDX(SKint32 r, SKint32 c) const
+inline SKint32 Board::getIdx(SKint32 r, SKint32 c) const
 {
     return r * m_boardColumns + c;
 }
@@ -179,7 +179,7 @@ void Board::movePiece(SKint32 x, SKint32 y)
 
             if (isInsideBoard(ic, ir))
             {
-                const SKint32 idx = GetIDX(ir, ic);
+                const SKint32 idx = getIdx(ir, ic);
                 if (idx < m_boardSize)
                 {
                     if (pCell == 0)
@@ -208,7 +208,7 @@ void Board::mergePiece(SKint32 x, SKint32 y) const
 
             if (isInsideBoard(ic, ir))
             {
-                const SKint32 idx = GetIDX(ir, ic);
+                const SKint32 idx = getIdx(ir, ic);
                 if (idx < m_boardSize)
                 {
                     if (pCell != 0)
@@ -241,7 +241,7 @@ bool Board::hasCollisions(SKint32 x, SKint32 y)
 
             if (isInsideBoard(ic, ir))
             {
-                const SKint32 idx = GetIDX(ir, ic);
+                const SKint32 idx = getIdx(ir, ic);
                 if (idx < m_boardSize)
                 {
                     const SKbyte& bCell = m_board[idx];
@@ -274,7 +274,7 @@ void Board::mergeAndShift()
         bool full = true;
         for (c = 0; c < m_boardColumns && full; ++c)
         {
-            const SKint32 idx = GetIDX(r, c);
+            const SKint32 idx = getIdx(r, c);
             if (idx > m_boardSize)
                 return;
 
@@ -289,8 +289,8 @@ void Board::mergeAndShift()
             {
                 for (c = 0; c < m_boardColumns; ++c)
                 {
-                    const SKint32 idx1 = GetIDX(r, c);
-                    const SKint32 idx2 = GetIDX(rm1, c);
+                    const SKint32 idx1 = getIdx(r, c);
+                    const SKint32 idx2 = getIdx(rm1, c);
                     if (idx1 < m_boardSize && idx2 < m_boardSize)
                         m_board[idx1] = m_board[idx2];
                 }
@@ -310,7 +310,7 @@ void Board::fill(const skRectangle& rect, const skScalar& blockSize) const
     {
         for (SKint32 c = 0; c < m_boardColumns; ++c)
         {
-            const SKint32 idx = GetIDX(r, c);
+            const SKint32 idx = getIdx(r, c);
             if (idx < m_boardSize)
             {
                 const SKbyte& gState = m_game[idx];

@@ -80,6 +80,10 @@ public:
     {
         return m_settings;
     }
+
+    void sortScore();
+
+    void mergeScore(SKint32 score);
 };
 
 #endif  //_GameManager_h_

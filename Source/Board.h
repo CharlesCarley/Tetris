@@ -59,7 +59,7 @@ private:
 
     void finalize();
 
-    SKint32 GetIDX(SKint32 r, SKint32 c) const;
+    SKint32 getIdx(SKint32 r, SKint32 c) const;
 
 public:
     explicit Board(SKint32 type);

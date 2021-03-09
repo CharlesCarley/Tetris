@@ -26,6 +26,9 @@
 
 class HighScores : public State
 {
+private:
+    SKint64 m_topTen[10];
+
 public:
     HighScores(GameManager* owner);
 

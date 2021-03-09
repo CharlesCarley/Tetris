@@ -71,6 +71,45 @@ void GameManager::popState()
     }
 }
 
+void GameManager::sortScore()
+{
+    for (SKint64 k = 0; k < 9; ++k)
+    {
+        SKint64 s = k;
+        for (SKint64 j = k + 1; j < 10; ++j)
+        {
+            if (m_settings.topTen[j] > m_settings.topTen[s])
+                s = j;
+        }
+        if (k != s)
+            skSwap(m_settings.topTen[k], m_settings.topTen[s]);
+    }
+}
+
+void GameManager::mergeScore(SKint32 score)
+{
+    bool hasScore = false;
+
+    for (int i = 0; i < 10 && !hasScore; ++i)
+        hasScore = m_settings.topTen[i] == score;
+
+    if (!hasScore)
+    {
+        for (int i = 0; i < 10; ++i)
+        {
+            SKint64& last = m_settings.topTen[i];
+            if (score > last)
+            {
+                m_settings.topTen[9] = score;
+                break;
+            }
+        }
+        
+    }
+
+    sortScore();
+}
+
 void GameManager::destroyOrphanedStates()
 {
     if (m_window)

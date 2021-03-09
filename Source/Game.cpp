@@ -89,6 +89,7 @@ void Game::onPush()
 
 void Game::onPop()
 {
+    m_owner->mergeScore(m_score);
     if (m_counter)
         m_counter->end();
 }

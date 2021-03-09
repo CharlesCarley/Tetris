@@ -48,6 +48,7 @@ struct UserSettings
     SKint32 width;
     SKint32 height;
     SKint32 gridType;
+    SKint64 topTen[10];
 };
 
 

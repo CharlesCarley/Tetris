@@ -22,7 +22,9 @@
 #include "Application.h"
 #include "GameManager.h"
 #include "Graphics/skGraphics.h"
+#include "Json/skJsonArray.h"
 #include "Json/skJsonObject.h"
+#include "Json/skJsonArray.h"
 #include "Json/skJsonParser.h"
 #include "Json/skJsonPrinter.h"
 #include "Json/skJsonVisitor.h"
@@ -59,11 +61,14 @@ const Switch Switches[TETRIS_MAX] = {
 class AppPrivate : public skJsonVisitor
 {
 private:
-    Application* m_parent;
+    Application*     m_parent;
+    bool             m_inArray;
+    skArray<SKint64> m_scores;
 
 public:
     AppPrivate(Application* parent) :
-        m_parent(parent)
+        m_parent(parent),
+        m_inArray(false)
     {
     }
     ~AppPrivate() override = default;
@@ -78,6 +83,33 @@ public:
             m_parent->m_settings.height = value.toInt32();
         else if (key.equals("type"))
             m_parent->m_settings.gridType = value.toInt32();
+    }
+
+    void integerParsed(const skString& value) override
+    {
+        if (m_inArray && m_scores.size() < 10)
+            m_scores.push_back(value.toInt64());
+    }
+
+    void arrayCreated() override
+    {
+        m_inArray = true;
+    }
+
+    void arrayFinished() override
+    {
+        m_inArray = false;
+    }
+
+    void mergeTop10(UserSettings& userSettings)
+    {
+        for (SKuint32 i = 0; i < 10; i++)
+        {
+            if (i < m_scores.size())
+                userSettings.topTen[i] = m_scores.at(i);
+            else
+                userSettings.topTen[i] = 0;
+        }
     }
 };
 
@@ -151,32 +183,32 @@ void Application::loadSettings()
     skJsonParser parser(m_private);
     parser.parse(m_programDir + "settings.json");
 
+    m_private->mergeTop10(m_settings);
+
     m_settings.width    = skClamp<SKint32>(m_settings.width, 200, 7680);
     m_settings.height   = skClamp<SKint32>(m_settings.height, 100, 4320);
-    m_settings.gridType = skClamp<SKint32>(m_settings.gridType, 0, 5);
+    m_settings.gridType = skClamp<SKint32>(m_settings.gridType, 0, 2);
 }
 
 void Application::saveSettings()
 {
     m_settings = m_manager->getSettings();
 
-
-
     skJsonObject obj;
     obj.insert("width", m_settings.width);
     obj.insert("height", m_settings.height);
     obj.insert("type", m_settings.gridType);
 
-    skJsonPrinter output;
+    skJsonArray* arr = new skJsonArray();
+    for (int i=0; i<10; i++)
+        arr->add(m_settings.topTen[i]);
+
+    obj.insert("topTen", arr);
+
+
+    const skJsonPrinter output;
     output.writeToFile(&obj, m_programDir + "settings.json");
-
-
-
-    // create a skJsonPrinter;
 }
-
-
-
 
 int Application::run()
 {
@@ -203,11 +235,8 @@ int Application::run()
             m_manager->destroyOrphanedStates();
     }
 
-
     saveSettings();
-
     delete resource;
-
     delete m_manager;
     return 0;
 }

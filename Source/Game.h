@@ -25,6 +25,7 @@
 #include "Math/skRectangle.h"
 #include "State.h"
 #include "Threads/skTimedCallback.h"
+#include "Threads/skMutex.h"
 #include "Utils/skString.h"
 
 class RefreshRunner;
@@ -45,6 +46,8 @@ private:
     SKint32          m_breakCount;
     Board*           m_board;
     skTimedCallback* m_counter;
+    skMutex          m_mutex;
+
 
     void fillBackDrops();
 

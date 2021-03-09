@@ -97,12 +97,10 @@ void HighScores::update()
                           rct.y + mts * (skScalar)i,
                           {
                               idx.c_str(),
-                              (SKint32)idx.capacity(),
+                              (SKint32)idx.size(),
                           });
 
         skChar::toString(str, m_topTen[i]);
-        str.resize(skChar::length(str.c_str()));
-
         SKint32 w;
         skGetFontTextExtent(R::getSingleton().Font, str.c_str(), (SKint32)str.size(), &w, nullptr);
 
@@ -110,6 +108,6 @@ void HighScores::update()
         RU::displayString(R::getSingleton(),
                           rct.x + rct.width - skScalar(w + 5),
                           rct.y + mts * (skScalar)i,
-                          {str.c_str(), (SKint32)str.capacity()});
+                          {str.c_str(), (SKint32)str.size()});
     }
 }

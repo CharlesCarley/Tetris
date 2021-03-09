@@ -73,7 +73,11 @@ void Game::initialize()
 void Game::tickStart()
 {
     ++m_cursorY;
-    refresh();
+
+    {
+        SK_LOCK_SCOPE(&m_mutex);
+        refresh();
+    }
 }
 
 void Game::onPush()

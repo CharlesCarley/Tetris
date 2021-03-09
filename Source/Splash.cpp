@@ -66,6 +66,8 @@ void Splash::update()
     skProjectContext(SK_STANDARD);
     skClearContext();
 
+    RU::displayBlockArt(R::SplashBG, true, .75f);
+
     RU::displayBlockArt(R::Splash, false);
 
     SKint32 w, h;

@@ -100,6 +100,7 @@ public:
     static const SKuint32 menuTextHighlight;
 
     static const BlockArt Splash;
+    static const BlockArt SplashBG;
     static const BlockArt GameBackground;
 
 public:

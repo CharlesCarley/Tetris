@@ -23,6 +23,7 @@
 #include "GameManager.h"
 #include "RenderUtils.h"
 #include "Window/skKeyboard.h"
+#include "Utils/skPlatformHeaders.h"
 
 using R = Resources;
 

@@ -244,7 +244,7 @@ int Application::run()
 int main(int argc, char** argv)
 {
     skLogger log;
-    log.setFlags(LF_STDOUT | LF_FILE | LF_TIMESTAMP | LF_DETAIL);
+    log.setFlags(LF_STDOUT);
     log.open("Tetris.log");
 
     try

@@ -2,3 +2,4 @@
 /build
 /Bin/*.exe
 /Bin/*.log
+/Bin/settings.json

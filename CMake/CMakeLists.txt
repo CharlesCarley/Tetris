@@ -23,6 +23,7 @@ if (MSVC)
 
     set(FilePatterns
         CMake:*.cmake
+        CMake\\Modules:Modules/*.cmake
         CMake:../CMakeLists.txt
         CMake\\Extern:../Extern/CMakeLists.txt
         Include:*.in

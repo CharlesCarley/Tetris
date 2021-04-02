@@ -34,3 +34,6 @@
 [submodule "Extern/Threads"]
 	path = Extern/Threads
 	url = https://github.com/CharlesCarley/Threads.git
+[submodule "CMake/Modules"]
+	path = CMake/Modules
+	url = https://github.com/CharlesCarley/CMakeModules.git

@@ -115,7 +115,7 @@ void MainMenu::onPush()
     skVector2        sz;
     skGetContext2f(SK_CONTEXT_SIZE, sz.ptr());
     sz *= skScalar(0.5);
-
+    m_clicked = false;
 
     const skScalar ms = sz.minValue();
     skSetFont1f(res.Font, SK_FONT_SIZE, ms / 18);
@@ -149,13 +149,19 @@ void MainMenu::handle(const skEventType& evt)
         m_selection = -1;
         refresh();
     }
+    else if (evt == SK_MOUSE_PRESSED)
+        m_clicked = true;
+
     else if (evt == SK_MOUSE_RELEASED)
     {
-        int opt;
-        if (m_exRect.contains(getMouseCo()))
-            close();
-        else if ((opt = testOption()) != -1)
-            pushOption(opt);
+        if (m_clicked)
+        {
+            int opt;
+            if (m_exRect.contains(getMouseCo()))
+                close();
+            else if ((opt = testOption()) != -1)
+                pushOption(opt);
+        }
     }
 }
 

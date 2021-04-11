@@ -23,9 +23,7 @@
 #define _MainMenu_h_
 
 #include "Math/skRectangle.h"
-
 #include "State.h"
-
 
 class MainMenu : public State
 {
@@ -35,6 +33,7 @@ private:
     skRectangle m_hsRect;
     skRectangle m_exRect;
     SKint32     m_selection;
+    bool        m_clicked;
 
     void handle(const skEventType& evt) override;
 

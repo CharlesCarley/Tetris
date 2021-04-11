@@ -52,13 +52,14 @@ void HighScores::handle(const skEventType& evt)
     }
     else if (evt == SK_MOUSE_PRESSED)
     {
-        if (!m_clicked && getMouseButton() == MBT_L)
+        if (getMouseButton() == MBT_L)
             m_clicked = true;
     }
     else if (evt == SK_MOUSE_RELEASED)
     {
         if (m_clicked && getMouseButton() == MBT_L)
             popState();
+
     }
 }
 

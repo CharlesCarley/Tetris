@@ -19,6 +19,7 @@
 # 3. This notice may not be removed or altered from any source distribution.
 # ------------------------------------------------------------------------------
 include (CopyTarget)
+include (FindVSEmscripten)
 
 macro(add_application TARGETNAME)
 
@@ -30,10 +31,53 @@ macro(add_application TARGETNAME)
     endif()
 
     include_directories(. ${Graphics_INCLUDE} ${${TARGETNAME}_INC})
-    if (Tetris_WIN_MAIN)
+    if (USING_EMSCRIPTEN)
+        set(BIN_DIR ${CMAKE_SOURCE_DIR}/docs)
+        add_executable(${TargetName}   ${BIN_DIR}/index.html ${${TARGETNAME}_SRC})
+        
+        enable_emscripten_html_executable(${TargetName})
+
+        set_target_properties(${TargetName} PROPERTIES VS_GLOBAL_EmSdlVersion        2)
+        set_target_properties(${TargetName} PROPERTIES VS_GLOBAL_EmUseFullOpenGles2  true)
+
+        set_target_properties(${TargetName} 
+            PROPERTIES VS_GLOBAL_EmEmbeddedFile  
+            "${CMAKE_CURRENT_SOURCE_DIR}/Content@/Content")
+
+        emscripten_copy_wasm_target_wasm_js(${TargetName} ${BIN_DIR}) 
+
+    elseif (Tetris_WIN_MAIN)
         add_executable(${TARGETNAME}  WIN32 ${${TARGETNAME}_SRC})
+        if (${TARGETNAME}_COPY_BIN) 
+    
+            copy_target(${TARGETNAME} ${CMAKE_SOURCE_DIR}/Bin) 
+            copy_content(${TARGETNAME} ${CMAKE_SOURCE_DIR}/Bin ${${TARGETNAME}_DAT})
+
+            if (MSVC)
+                set_target_properties(
+                    ${TARGETNAME} 
+                    PROPERTIES 
+                    VS_DEBUGGER_WORKING_DIRECTORY  
+                    ${CMAKE_SOURCE_DIR}/Bin
+                )
+            endif()
+        endif()
     else()
         add_executable(${TARGETNAME} ${${TARGETNAME}_SRC})
+        if (${TARGETNAME}_COPY_BIN) 
+    
+            copy_target(${TARGETNAME} ${CMAKE_SOURCE_DIR}/Bin) 
+            copy_content(${TARGETNAME} ${CMAKE_SOURCE_DIR}/Bin ${${TARGETNAME}_DAT})
+
+            if (MSVC)
+                set_target_properties(
+                    ${TARGETNAME} 
+                    PROPERTIES 
+                    VS_DEBUGGER_WORKING_DIRECTORY  
+                    ${CMAKE_SOURCE_DIR}/Bin
+                )
+            endif()
+        endif()
     endif()
 
     target_link_libraries(
@@ -41,30 +85,5 @@ macro(add_application TARGETNAME)
         ${Graphics_LIBRARY}
         ${${TARGETNAME}_LIB}
        )
-
-    if (${TARGETNAME}_COPY_BIN) 
-    
-        copy_target(${TARGETNAME} ${CMAKE_SOURCE_DIR}/Bin) 
-        copy_content(${TARGETNAME} ${CMAKE_SOURCE_DIR}/Bin ${${TARGETNAME}_DAT})
-
-        if (MSVC)
-            set_target_properties(
-                ${TARGETNAME} 
-                PROPERTIES 
-                VS_DEBUGGER_WORKING_DIRECTORY  
-                ${CMAKE_SOURCE_DIR}/Bin
-            )
-        endif()
-    else()
-        if (MSVC)
-            set_target_properties(
-                ${TARGETNAME} 
-                PROPERTIES 
-                VS_DEBUGGER_WORKING_DIRECTORY  
-                ${CMAKE_CURRENT_SOURCE_DIR}
-            )
-        endif()
-    endif()
-
 
 endmacro()

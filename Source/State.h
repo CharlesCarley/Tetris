@@ -39,6 +39,7 @@ public:
 
     skVector2 getMouseCo() const;
 
+    SKint32   getMouseButton() const;
     
     SKint32 getKey() const;
 

@@ -19,26 +19,52 @@
   3. This notice may not be removed or altered from any source distribution.
 -------------------------------------------------------------------------------
 */
-#ifndef _Settings_h_
-#define _Settings_h_
+#ifndef _TimedCallback_h_
+#define _TimedCallback_h_
 
-#include "Math/skRectangle.h"
-#include "State.h"
+#include "Utils/skTimer.h"
+#include "Window/skWindowHandler.h"
 
-class Settings : public State
+class GameManager;
+
+class TimedCallback final : public skWindowHandler
 {
+public:
+    class Listener
+    {
+    public:
+        virtual ~Listener() = default;
+
+        virtual void tickStart()
+        {
+        }
+
+        virtual void tickEnd()
+        {
+        }
+    };
+
 private:
-    SKint32     m_selection;
-    skRectangle m_r1, m_r2, m_r3;
+    SKulong      m_interrupt, m_tick;
+    Listener*    m_listener;
+    bool         m_running;
+    skTimer      m_timer;
+    GameManager* m_owner;
+
+    void handle(const skEventType& event, skWindow* window) override
+    {
+    }
+
+    void frameStarted() override;
 
 public:
-    Settings(GameManager* owner);
+    TimedCallback(Listener* listener, const SKulong& interrupt, GameManager *mgr);
 
-    void update() override;
+    ~TimedCallback() override;
 
-    void onPop() override;
-
-    void handle(const skEventType& evt) override;
+    void setInterval(const SKulong& interrupt);
+    void begin();
+    void end();
 };
 
-#endif  //_Settings_h_
+#endif  //_TimedCallback_h_

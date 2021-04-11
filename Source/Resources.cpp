@@ -20,6 +20,7 @@
 -------------------------------------------------------------------------------
 */
 #include "Resources.h"
+#include "Math/skVector2.h"
 
 using R = Resources;
 
@@ -193,6 +194,13 @@ void Resources::clearState() const
     skSetPaint1f(SK_PEN_WIDTH, 1.11f);
     skSelectImage(nullptr);
     skSetFont1i(Font, SK_FONT_SIZE, menuTextSize);
+
+    skVector2 sz;
+    skGetContext2f(SK_CONTEXT_SIZE, sz.ptr());
+    const skScalar ms = sz.minValue();
+
+    skSetFont1f(Font, SK_FONT_SIZE, ms / 18);
+    skSetFont1f(FontSm, SK_FONT_SIZE, ms / 32);
 }
 
 void Resources::load()
@@ -207,7 +215,7 @@ void Resources::load()
     if (!FontSm)
     {
         FontSm = skNewFontFromFile("Content/Orbitron-SemiBold.ttf", 16, 96);
-        skSetFont1i(Font, SK_FONT_FILTER, SK_FILTER_BI_LINEAR);
-        skSetFont1i(Font, SK_FONT_MIPMAP, 1);
+        skSetFont1i(FontSm, SK_FONT_FILTER, SK_FILTER_BI_LINEAR);
+        skSetFont1i(FontSm, SK_FONT_MIPMAP, 1);
     }
 }

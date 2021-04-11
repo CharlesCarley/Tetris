@@ -41,7 +41,7 @@ void MainMenu::initialize()
     const Resources& res = Resources::getSingleton();
 
     m_selection = 0;
-    skSetFont1i(res.Font, SK_FONT_SIZE, R::menuTextSize);
+    //skSetFont1i(res.Font, SK_FONT_SIZE, R::menuTextSize);
 
     RU::getTextRect(res, m_ngRect, R::NewGame);
     RU::getTextRect(res, m_hsRect, R::HighScores);
@@ -112,14 +112,15 @@ bool MainMenu::handleKey()
 void MainMenu::onPush()
 {
     const Resources& res = Resources::getSingleton();
-
-    skSetFont1i(res.Font, SK_FONT_SIZE, R::menuTextSize);
-
-    skVector2 sz;
+    skVector2        sz;
     skGetContext2f(SK_CONTEXT_SIZE, sz.ptr());
     sz *= skScalar(0.5);
 
-    const SKscalar offs = SKscalar(R::menuTextSize + 50);
+
+    const skScalar ms = sz.minValue();
+    skSetFont1f(res.Font, SK_FONT_SIZE, ms / 18);
+
+    const SKscalar offs = SKscalar(ms / 18 + 50);
     sz.y -= offs * 2;
 
     // Compute the text rectangle's starting position

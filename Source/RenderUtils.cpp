@@ -150,15 +150,17 @@ void RenderUtils::displayGrayedBlock(const SKuint8& col, skScalar x, skScalar y,
 
 void RenderUtils::displayBlockArt(const BlockArt& block, bool grey, skScalar opacity)
 {
-    skScalar wh[2] = {};
-    skGetContext2f(SK_CONTEXT_SIZE, wh);
+    skVector2 wh = {};
+    skGetContext2f(SK_CONTEXT_SIZE, wh.ptr());
 
-    skRectangle bb(0, 0, wh[0], wh[1]);
+    const skScalar ms = wh.minValue();
 
-    skScalar blockSize = wh[1] / BlockArtHeight;
+    skRectangle bb(0, 0, wh.x, wh.y);
+
+    skScalar blockSize = ms / BlockArtWidth;
     bb.contract(blockSize, blockSize);
 
-    blockSize = bb.height / BlockArtHeight;
+    blockSize = ms / BlockArtWidth;
 
     const skScalar gw = blockSize * BlockArtWidth;
     const skScalar gh = blockSize * BlockArtHeight;

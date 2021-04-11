@@ -18,7 +18,11 @@
 # 3. This notice may not be removed or altered from any source distribution.
 # ------------------------------------------------------------------------------
 include(Application)
-set(TargetName_RES Resource/AppIcon.rc)
+
+if (NOT USING_EMSCRIPTEN)
+    set(TargetName_RES Resource/AppIcon.rc)
+endif()
+
 
 set(Tetris_SRC 
     Application.h
@@ -34,6 +38,7 @@ set(Tetris_SRC
     Settings.h
     Splash.h
     State.h
+    TimedCallback.h
     
     Application.cpp
     Board.cpp
@@ -48,6 +53,7 @@ set(Tetris_SRC
     Settings.cpp
     Splash.cpp
     State.cpp
+    TimedCallback.cpp
     ${TargetName_RES}
 )
 

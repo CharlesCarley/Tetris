@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="en">
+
+<head>
+    <title>Tests</title>
+    <style>
+        body {
+            background-color: #222;
+            text-align: center;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        .CanvasContainer {
+            background-color: #222;
+            margin: 2px;
+        }
+
+        .CanvasArea {
+            width: inherit;
+            height: inherit;
+            padding: 1px;
+            background-color: #303030;
+        }
+    </style>
+</head>
+
+<body onresize="Module.notifySize()">
+
+    <div id="CanvasContainer" class="CanvasContainer">
+        <canvas class="CanvasArea"
+                id="canvas"
+                oncontextmenu="preventDefault()"
+                tabindex="-1"></canvas>
+    </div>
+
+    <script type="text/javascript">
+        const PADDING = 25;
+        // this will allow you to control
+        // the ratio of the canvas, right now 1:1
+        const Rt =  100;
+        const Rb =  100;
+        const Factor =  (Rb/Rt);
+
+        function min(a, b) { return a < b ? a : b; }
+
+        function setSize() {
+            let w = min(window.innerWidth,window.innerHeight);
+            let h = window.innerHeight;
+            let sx = w*Factor;
+            let sy = h;
+
+            const canvas = document.getElementById("canvas");
+
+            if (canvas) {
+                sx-=2*PADDING;
+                sy-=2*PADDING;
+                canvas.width = sx;
+                canvas.height = sy;
+                canvas.style.width = sx + "px";
+                canvas.style.height = sy + "px";
+                canvas.style.paddingLeft = PADDING + "px";
+                canvas.style.paddingTop = PADDING + "px";
+                canvas.style.paddingRight = PADDING + "px";
+                canvas.style.paddingBottom = PADDING + "px";
+            }
+        }
+
+        var Module = {
+            preRun: [function () {
+            }],
+            postRun: [function () {
+                setSize();
+                window.dispatchEvent(new Event('resize'));
+            }],
+            canvas: (function () {
+                const canvas = document.getElementById("canvas");
+                canvas.addEventListener("webglcontextlost",
+                    function (e) {
+                        alert('WebGL context lost. You will need to reload the page.');
+                        e.preventDefault();
+                    },
+                    false
+                );
+                return canvas;
+            })(),
+            print: (function () {
+                return function (text) {
+                    if (arguments.length > 1)
+                        text = Array.prototype.slice.call(arguments).join(' ');
+                    console.log(text);
+                };
+            })(),
+            notifySize: function () {
+                setSize();
+            }
+        };
+    </script>
+
+    <script async type="text/javascript" src="./Tetris.js"></script>
+</body>
+
+</html>

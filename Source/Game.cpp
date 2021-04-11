@@ -64,20 +64,27 @@ void Game::finalize()
 
 void Game::initialize()
 {
-    m_counter = new skTimedCallback(this, m_level);
-    updateScore(5);
+#if SK_PLATFORM == SK_PLATFORM_EMSCRIPTEN
+    m_counter = new Counter(this, m_level, m_owner);
+#else
+    m_counter = new Counter(this, m_level);
+#endif
 
+    updateScore(5);
     m_board = new Board(m_owner->getSettings().gridType);
 }
 
 void Game::tickStart()
 {
     ++m_cursorY;
-
+#if SK_PLATFORM != SK_PLATFORM_EMSCRIPTEN
     {
         SK_LOCK_SCOPE(&m_mutex);
         refresh();
     }
+#else
+    refresh();
+#endif
 }
 
 void Game::onPush()
@@ -102,6 +109,8 @@ void Game::handle(const skEventType& evt)
 {
     if (evt == SK_WIN_DESTROY)
         m_counter->end();
+    else if (evt == SK_WIN_SIZE)
+        calculateBoardSize();
     else if (evt == SK_KEY_PRESSED)
         handleKeyboard();
 }
@@ -175,9 +184,11 @@ void Game::calculateBoardSize()
     skVector2 sz;
     skGetContext2f(SK_CONTEXT_SIZE, sz.ptr());
 
+    const skScalar ms = sz.minValue();
+
     // Center it in The window
     m_gameRect.setPosition(0, 0);
-    m_gameRect.setSize(sz.x / 3.33333f, 0);
+    m_gameRect.setSize(ms / skScalar(2.75f), 0);
 
     // Find the number of blocks that will fit in the width
     m_blockSize = m_gameRect.width / skScalar(m_board->getBoardWidth());
@@ -185,14 +196,18 @@ void Game::calculateBoardSize()
     /// scale that to the height
     m_gameRect.height = m_blockSize * skScalar(m_board->getBoardHeight());
 
-    // center it into the window
-    m_gameRect.x = sz.x / 2 - m_gameRect.width / 2;
-    m_gameRect.y = sz.y / 2 - m_gameRect.height / 2;
+    // center it in the window
+    m_gameRect.x = (sz.x - m_gameRect.width) / 2;
+    m_gameRect.y = (sz.y - m_gameRect.height) / 2;
+    m_gameRect.x -= m_blockSize;
 
-    m_nextRect.x      = m_gameRect.getRight() + 3 * m_blockSize;
-    m_nextRect.y      = m_gameRect.y;
+    const skScalar w = sz.x - m_gameRect.getRight();
+
     m_nextRect.width  = 5 * m_blockSize;
     m_nextRect.height = m_nextRect.width;
+
+    m_nextRect.x = m_gameRect.getRight() + (w - m_nextRect.width) / 2;
+    m_nextRect.y = m_gameRect.y;
 }
 
 void Game::fillBackDrops()
@@ -232,16 +247,19 @@ void Game::fillBackDrops()
     if (m_levelStr.empty())
         updateLevelString();
 
-    skSetFont1f(R.Font, SK_FONT_SIZE, skScalar(Resources::menuTextSize / 1.75));
+    skVector2 sz;
+    skGetContext2f(SK_CONTEXT_SIZE, sz.ptr());
+    const skScalar ms = sz.minValue() / 24.f;
+    skSetFont1f(R.Font, SK_FONT_SIZE, ms);
 
     RU::displayDropShadow(R,
                           m_gameRect.x,
-                          m_gameRect.y - skScalar(Resources::menuTextSize),
+                          m_gameRect.y - 2 * ms,
                           m_levelStr);
 
     RU::displayDropShadow(R,
                           m_nextRect.getLeft(),
-                          m_nextRect.getBottom() + skScalar(Resources::menuTextSize),
+                          m_nextRect.getBottom() + ms,
                           m_scoreStr);
 }
 
@@ -278,15 +296,15 @@ void Game::stepLevel()
 
 void Game::updateLevelString()
 {
-    m_levelStr = skString::format("Level: %d", 1 + (R::LevelSpeedMax - m_level) / R::LevelStep);
+    m_levelStr = skString("Level: ");
+    m_levelStr.append(skChar::toString(1 + (R::LevelSpeedMax - m_level) / R::LevelStep));
 }
 
-void Game::updateScore(int numBlocks)
+void Game::updateScore(const int numBlocks)
 {
     if (numBlocks > 0)
     {
         const int levelFac = 1 + (R::LevelSpeedMax - m_level) / R::LevelStep;
-
         switch (numBlocks)
         {
         case 1:
@@ -306,7 +324,6 @@ void Game::updateScore(int numBlocks)
             break;
         }
     }
-
     updateScoreString();
 }
 

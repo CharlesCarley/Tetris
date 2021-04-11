@@ -44,6 +44,7 @@ private:
     void initialize(skWindow* win);
 
     void handle(const skEventType& evt, skWindow* caller) override;
+    void frameEnded() override;
 
     void loadSettings();
     void saveSettings();

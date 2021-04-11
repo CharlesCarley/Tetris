@@ -18,6 +18,10 @@
 #    misrepresented as being the original software.
 # 3. This notice may not be removed or altered from any source distribution.
 # ------------------------------------------------------------------------------
+if (NOT USING_EMSCRIPTEN)
+    subdirs(Data2Array)
+endif()
+
 subdirs(FreeType)
 subdirs(FreeImage)
 subdirs(Utils)
@@ -33,5 +37,4 @@ if(Tetris_BACKEND_OPENGL)
     subdirs(Window/Window)
 endif()
 
-subdirs(Data2Array)
 subdirs(Graphics/Graphics)

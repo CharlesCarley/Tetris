@@ -140,6 +140,7 @@ void Application::handle(const skEventType& evt, skWindow* caller)
     {
     case SK_WIN_SIZE:
         skSetContext2i(SK_CONTEXT_SIZE, caller->getWidth(), caller->getHeight());
+        m_manager->handle(evt);
         caller->refresh();
         break;
     case SK_WIN_PAINT:
@@ -159,6 +160,12 @@ void Application::handle(const skEventType& evt, skWindow* caller)
         m_manager->handle(evt);
         break;
     }
+}
+
+void Application::frameEnded()
+{
+    if (m_manager && m_manager->hasOrphanedStates())
+        m_manager->destroyOrphanedStates();
 }
 
 int Application::parseCommandLine(int argc, char** argv)
@@ -181,7 +188,7 @@ int Application::parseCommandLine(int argc, char** argv)
 void Application::loadSettings()
 {
     skJsonParser parser(m_private);
-    parser.parse(m_programDir + "settings.json");
+    parser.parse(m_programDir + "Content/settings.json");
 
     m_private->mergeTop10(m_settings);
 
@@ -205,9 +212,8 @@ void Application::saveSettings()
 
     obj.insert("topTen", arr);
 
-
     const skJsonPrinter output;
-    output.writeToFile(&obj, m_programDir + "settings.json");
+    output.writeToFile(&obj, m_programDir + "Content/settings.json");
 }
 
 int Application::run()
@@ -220,7 +226,7 @@ int Application::run()
     skWindow* win = mgr.create("Tetris",
                                m_settings.width,
                                m_settings.height,
-                               WM_WF_SHOW_CENT_DIA);
+                               WM_WF_SHOWN | WM_WF_CENTER);
 
     m_manager = new GameManager(win);
     m_manager->setSettings(m_settings);
@@ -228,12 +234,14 @@ int Application::run()
     // Broadcast a size message so that handlers
     // can update rectangles appropriately.
     mgr.dispatchInitialEvents();
-
+#if SK_PLATFORM == SK_PLATFORM_EMSCRIPTEN
+    mgr.process();
+#else
     while (mgr.processInteractive(true))
     {
-        if (m_manager->hasOrphanedStates())
-            m_manager->destroyOrphanedStates();
     }
+
+#endif
 
     saveSettings();
     delete resource;

@@ -24,14 +24,24 @@
 
 #include "Math/skRectangle.h"
 #include "State.h"
-#include "Threads/skTimedCallback.h"
 #include "Threads/skMutex.h"
 #include "Utils/skString.h"
+
+#if SK_PLATFORM == SK_PLATFORM_EMSCRIPTEN
+#include "TimedCallback.h"
+using TimedCallbackListener = TimedCallback::Listener;
+using Counter = TimedCallback;
+#else
+#include "Threads/skTimedCallback.h"
+using TimedCallbackListener = skTimedCallback::Listener;
+using Counter               = skTimedCallback;
+#endif
 
 class RefreshRunner;
 class Board;
 
-class Game : public State, public skTimedCallback::Listener
+
+class Game : public State, public TimedCallbackListener
 {
 private:
     skRectangle      m_gameRect;
@@ -45,7 +55,7 @@ private:
     SKint32          m_score;
     SKint32          m_breakCount;
     Board*           m_board;
-    skTimedCallback* m_counter;
+    Counter*         m_counter;
     skMutex          m_mutex;
 
 

@@ -52,6 +52,11 @@ void Splash::handle(const skEventType& evt)
             break;
         }
     }
+    else if (evt == SK_MOUSE_RELEASED)
+    {
+        if (getMouseButton() == MBT_L)
+            pushState(new MainMenu(m_owner));
+    }
 }
 
 void Splash::update()
@@ -61,6 +66,7 @@ void Splash::update()
 
     skVector2 sz, pos;
     skGetContext2f(SK_CONTEXT_SIZE, sz.ptr());
+
 
     skClearColor1i(R::Background);
     skProjectContext(SK_STANDARD);

@@ -6,8 +6,9 @@ list(APPEND CMAKE_MODULE_PATH  ${Tetris_SOURCE_DIR}/CMake ${Tetris_SOURCE_DIR}/C
 list(APPEND CMAKE_MODULE_PATH  ${Tetris_SOURCE_DIR}/Extern/Data2Array/CMake)
 include(Configure)
 subdirs(CMake)
-subdirs(Extern)
 
+
+subdirs(Extern)
 set(TargetName Tetris)
 
 set(Tetris_INCLUDE  ${Tetris_SOURCE_DIR}/Source)
@@ -15,12 +16,11 @@ set(Tetris_LIBRARY  ${TargetName})
 subdirs(Source)
 
 
-if (Tetris_BUILD_TEST)
+if (Tetris_BUILD_TEST AND NOT USING_EMSCRIPTEN)
     set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
     set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
     add_subdirectory(${Tetris_SOURCE_DIR}/Test/googletest/)
 
-    
     add_external_test(Utils Tests)
     add_external_test(Json Test)
     add_external_test(Threads Test)

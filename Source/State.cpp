@@ -50,6 +50,21 @@ skVector2 State::getMouseCo() const
     return skVector2::Zero;
 }
 
+SKint32 State::getMouseButton() const
+{
+    
+    skWindow* win = m_owner->getWindow();
+    if (win)
+    {
+        skMouse* mouse = win->getMouse();
+        if (mouse)
+        {
+            return mouse->button;
+        }
+    }
+    return MBT_None;
+}
+
 SKint32 State::getKey() const
 {
     skWindow* win = m_owner->getWindow();

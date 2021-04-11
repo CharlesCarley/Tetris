@@ -29,7 +29,8 @@ using R = Resources;
 
 HighScores::HighScores(GameManager* owner) :
     State(owner),
-    m_topTen()
+    m_topTen(),
+    m_clicked(false)
 {
     owner->sortScore();
     skMemcpy(m_topTen, owner->getSettings().topTen, sizeof(SKint64) * 10);
@@ -48,6 +49,16 @@ void HighScores::handle(const skEventType& evt)
         default:
             break;
         }
+    }
+    else if (evt == SK_MOUSE_PRESSED)
+    {
+        if (!m_clicked && getMouseButton() == MBT_L)
+            m_clicked = true;
+    }
+    else if (evt == SK_MOUSE_RELEASED)
+    {
+        if (m_clicked && getMouseButton() == MBT_L)
+            popState();
     }
 }
 

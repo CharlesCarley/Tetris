@@ -79,6 +79,11 @@ void Settings::handle(const skEventType& evt)
                 m_selection = 2;
                 refresh();
             }
+            else if (!m_group.contains(mc))
+            {
+                popState();
+            }
+
         }
     }
 }
@@ -113,6 +118,7 @@ void Settings::update()
     rct.x = sz.x * 0.5f - rct.width * 0.5f;
     rct.y = 20 + mts3;
 
+    m_group = rct;
     skColor1ui(Resources::TextFaded);
     skRect(rct.x, rct.y, rct.width, rct.height);
     skStroke();

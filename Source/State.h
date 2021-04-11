@@ -39,14 +39,15 @@ public:
 
     skVector2 getMouseCo() const;
 
-    SKint32   getMouseButton() const;
-    
+    SKint32 getMouseButton() const;
+
+    SKint32 getMouseButtonState(const SKuint32& button) const;
+
     SKint32 getKey() const;
 
     void refresh() const;
 
     void close();
-    
 
     void pushState(State* newState) const;
 
@@ -54,23 +55,42 @@ public:
 
     void popAndSaveState() const;
 
-    virtual void initialize() {}
+    virtual void initialize()
+    {
+    }
 
-    virtual void finalize() {}
+    virtual void finalize()
+    {
+    }
 
-    virtual void preUpdate() {}
+    virtual void preUpdate()
+    {
+    }
 
-    virtual void update() {}
+    virtual void update()
+    {
+    }
 
-    virtual void postUpdate() {}
+    virtual void postUpdate()
+    {
+    }
 
-    virtual void onPush() {}
+    virtual void onPush()
+    {
+    }
 
-    virtual void onPop() {}
+    virtual void onPop()
+    {
+    }
 
-    virtual void handle(const skEventType& evt) {}
+    virtual void handle(const skEventType& evt)
+    {
+    }
 
-    virtual bool overrideDefaultState() { return false; }
+    virtual bool overrideDefaultState()
+    {
+        return false;
+    }
 };
 
 #endif  //_State_h_

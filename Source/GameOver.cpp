@@ -29,7 +29,8 @@
 using R = Resources;
 
 GameOver::GameOver(GameManager* owner) :
-    State(owner)
+    State(owner),
+    m_clicked(false)
 {
 }
 
@@ -46,6 +47,16 @@ void GameOver::handle(const skEventType& evt)
         default:
             break;
         }
+    }
+    else if (evt == SK_MOUSE_PRESSED)
+    {
+        if (!m_clicked && getMouseButton() == MBT_L)
+            m_clicked = true;
+    }
+    else if (evt == SK_MOUSE_RELEASED)
+    {
+        if (m_clicked && getMouseButton() == MBT_L)
+            popState();
     }
 }
 

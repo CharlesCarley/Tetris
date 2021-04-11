@@ -28,11 +28,17 @@ class HighScores : public State
 {
 private:
     SKint64 m_topTen[10];
+    bool    m_clicked;
 
 public:
     HighScores(GameManager* owner);
 
     void update() override;
+
+    void onPush() override
+    {
+        m_clicked = false;
+    }
 
     void handle(const skEventType& evt) override;
 };

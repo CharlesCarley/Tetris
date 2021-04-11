@@ -26,10 +26,18 @@
 
 class GameOver : public State
 {
+private:
+    bool m_clicked;
+
 public:
     GameOver(GameManager* owner);
 
     void update() override;
+
+    void onPush() override
+    {
+        m_clicked = false;
+    }
 
     void handle(const skEventType& evt) override;
 };

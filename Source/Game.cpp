@@ -37,6 +37,11 @@ Game::Game(GameManager* owner) :
     m_cursorX(0),
     m_cursorY(0),
     m_level(R::LevelSpeedMax),
+    m_xStep(0),
+    m_yStep(0),
+    m_lco(0, 0),
+    m_dragged(false),
+    m_canDrag(true),
     m_score(0),
     m_breakCount(0),
     m_board(nullptr),
@@ -113,6 +118,96 @@ void Game::handle(const skEventType& evt)
         calculateBoardSize();
     else if (evt == SK_KEY_PRESSED)
         handleKeyboard();
+    else if (evt == SK_MOUSE_PRESSED)
+        handleMouseDown();
+    else if (evt == SK_MOUSE_RELEASED)
+        handleMouseUp();
+    else if (evt == SK_MOUSE_MOVED)
+        handleMouseMotion();
+}
+
+void Game::handleMouseDown()
+{
+    m_lco   = getMouseCo();
+    m_yStep = skScalar(m_cursorY);
+    m_xStep = skScalar(m_cursorX);
+
+    m_canDrag = true;
+    if (m_dragged)
+        m_dragged = false;
+}
+
+void Game::handleMouseUp()
+{
+    m_lco = getMouseCo();
+
+    bool handled = false;
+    if (!m_dragged && getMouseButton() == MBT_L)
+    {
+        if (!m_dragged)
+        {
+            m_board->rotate();
+            handled = true;
+        }
+    }
+
+    if (m_dragged)
+        m_dragged = false;
+
+    if (handled)
+        refresh();
+}
+
+void Game::handleMouseMotion()
+{
+    if (!m_canDrag)
+        return;
+
+    bool handled = false;
+    if (getMouseButtonState(MBT_L) == WM_PRESSED)
+    {
+        const skVector2 mco  = getMouseCo();
+        const skVector2 dVec = mco - m_lco;
+        m_lco                = mco;
+
+        const skScalar dLen = .5;
+        const skScalar xDir = dVec.x;
+        const skScalar yDir = dVec.y;
+        const skScalar tol  = 3;
+
+        if (skABS(yDir) > skABS(xDir))
+        {
+            if (yDir > tol)
+            {
+                m_yStep += dLen;
+
+                m_cursorY = (int)m_yStep;
+                m_dragged = true;
+                handled   = true;
+            }
+        }
+        else
+        {
+            if (xDir > tol)
+            {
+                m_xStep += dLen;
+
+                m_dragged = true;
+                handled   = true;
+                m_cursorX = (int)m_xStep;
+            }
+            else if (xDir < -tol)
+            {
+                m_xStep -= dLen;
+                m_dragged = true;
+                handled   = true;
+                m_cursorX = (int)m_xStep;
+            }
+        }
+    }
+
+    if (handled)
+        refresh();
 }
 
 void Game::handleKeyboard()
@@ -249,7 +344,7 @@ void Game::fillBackDrops()
 
     skVector2 sz;
     skGetContext2f(SK_CONTEXT_SIZE, sz.ptr());
-    const skScalar ms = sz.minValue() / 24.f;
+    const skScalar ms = sz.minValue() / 32.f;
     skSetFont1f(R.Font, SK_FONT_SIZE, ms);
 
     RU::displayDropShadow(R,
@@ -361,6 +456,7 @@ void Game::update()
 
         m_board->mergeAndShift();
         m_board->drop();
+        m_canDrag = false;
 
         const SKint32 mc = m_board->getLastMergeCount();
 

@@ -65,6 +65,22 @@ SKint32 State::getMouseButton() const
     return MBT_None;
 }
 
+
+SKint32 State::getMouseButtonState(const SKuint32& button) const
+{
+    skWindow* win = m_owner->getWindow();
+    if (win)
+    {
+        skMouse* mouse = win->getMouse();
+        if (mouse)
+        {
+            return mouse->isButtonDown(button) ? WM_PRESSED : WM_RELEASED;
+        }
+    }
+    return MBT_None;
+}
+
+
 SKint32 State::getKey() const
 {
     skWindow* win = m_owner->getWindow();

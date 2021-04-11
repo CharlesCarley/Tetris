@@ -29,7 +29,7 @@ class Settings : public State
 {
 private:
     SKint32     m_selection;
-    skRectangle m_r1, m_r2, m_r3;
+    skRectangle m_r1, m_r2, m_r3, m_group;
 
 public:
     Settings(GameManager* owner);

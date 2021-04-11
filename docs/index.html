@@ -32,12 +32,12 @@
     <div id="CanvasContainer" class="CanvasContainer">
         <canvas class="CanvasArea"
                 id="canvas"
-                oncontextmenu="preventDefault()"
+                oncontextmenu="event.preventDefault()"
                 tabindex="-1"></canvas>
     </div>
 
     <script type="text/javascript">
-        const PADDING = 5;
+        const PADDING = 0;
         // this will allow you to control
         // the ratio of the canvas, right now 1:1
         const Rt =  100;

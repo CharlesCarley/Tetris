@@ -30,7 +30,7 @@
 #if SK_PLATFORM == SK_PLATFORM_EMSCRIPTEN
 #include "TimedCallback.h"
 using TimedCallbackListener = TimedCallback::Listener;
-using Counter = TimedCallback;
+using Counter               = TimedCallback;
 #else
 #include "Threads/skTimedCallback.h"
 using TimedCallbackListener = skTimedCallback::Listener;
@@ -40,24 +40,25 @@ using Counter               = skTimedCallback;
 class RefreshRunner;
 class Board;
 
-
 class Game : public State, public TimedCallbackListener
 {
 private:
-    skRectangle      m_gameRect;
-    skRectangle      m_nextRect;
-    skScalar         m_blockSize;
-    SKint32          m_cursorX;
-    SKint32          m_cursorY;
-    SKint32          m_level;
-    skString         m_levelStr;
-    skString         m_scoreStr;
-    SKint32          m_score;
-    SKint32          m_breakCount;
-    Board*           m_board;
-    Counter*         m_counter;
-    skMutex          m_mutex;
-
+    skRectangle m_gameRect;
+    skRectangle m_nextRect;
+    skScalar    m_blockSize;
+    SKint32     m_cursorX;
+    SKint32     m_cursorY;
+    SKint32     m_level;
+    skScalar    m_xStep, m_yStep;
+    skVector2   m_lco;
+    bool        m_dragged, m_canDrag;
+    skString    m_levelStr;
+    skString    m_scoreStr;
+    SKint32     m_score;
+    SKint32     m_breakCount;
+    Board*      m_board;
+    Counter*    m_counter;
+    skMutex     m_mutex;
 
     void fillBackDrops();
 
@@ -68,6 +69,12 @@ private:
     void handle(const skEventType& evt) override;
 
     void handleKeyboard();
+
+    void handleMouseDown();
+
+    void handleMouseUp();
+
+    void handleMouseMotion();
 
     void updateCursor();
 

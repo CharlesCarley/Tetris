@@ -6,6 +6,8 @@ A Tetris clone written with OpenGL and C++.
 ![SS02](Resources/Main02.png)
 ![SS02](Resources/Main03.png)
 
+
+
 ## Controls
 
 | Key              | Description                                      |
@@ -20,6 +22,10 @@ A Tetris clone written with OpenGL and C++.
 | Up               | Moves up, but subtracts one from  the score.     |
 | Down             | Drops the current piece.                         |
 | Number pad (-)   | Increments the level.                            |
+
+## Online Version
+
+The online version can be found [here](https://CharlesCarley.github.io/Tetris/index.html).
 
 ## Sub-modules
 

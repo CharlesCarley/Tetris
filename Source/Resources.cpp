@@ -41,7 +41,7 @@ const SKuint32 R::Background        = 0x222222FF;
 const SKuint32 R::DarkBorder        = 0x000000FF;
 const SKuint32 R::Shadow            = 0x1B1B1BFF;
 const SKuint32 R::DarkerShadow      = 0x2A2A2AFF;
-const SKuint32 R::Text              = 0x707070FF;
+const SKuint32 R::Text              = 0x7F7F7FFF;
 const SKuint32 R::TextFaded         = 0x414141FF;
 const SKuint32 R::TextFadedMore     = 0x2A2A2AFF;
 
@@ -193,14 +193,13 @@ void Resources::clearState() const
     skSetPaint1i(SK_BRUSH_MODE, SK_BM_REPLACE);
     skSetPaint1f(SK_PEN_WIDTH, 1.11f);
     skSelectImage(nullptr);
-    skSetFont1i(Font, SK_FONT_SIZE, menuTextSize);
 
     skVector2 sz;
     skGetContext2f(SK_CONTEXT_SIZE, sz.ptr());
     const skScalar ms = sz.minValue();
 
-    skSetFont1f(Font, SK_FONT_SIZE, ms / 18);
-    skSetFont1f(FontSm, SK_FONT_SIZE, ms / 32);
+    skSetFont1f(Font, SK_FONT_SIZE, ms * FontScale);
+    skSetFont1f(FontSm, SK_FONT_SIZE, ms * FontSmScale);
 }
 
 void Resources::load()

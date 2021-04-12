@@ -42,7 +42,6 @@ struct BlockArt
     const SKbyte art[BlockArtHeight][BlockArtWidth];
 };
 
-
 struct UserSettings
 {
     SKint32 width;
@@ -50,8 +49,6 @@ struct UserSettings
     SKint32 gridType;
     SKint64 topTen[10];
 };
-
-
 
 class Resources : public skSingleton<Resources>
 {
@@ -61,9 +58,12 @@ public:
     SKfont Font;
     SKfont FontSm;
 
-    static const SKint32 LevelSpeedMax = 1000000;
-    static const SKint32 LevelSpeedMin = 100;
-    static const SKint32 LevelStep     = 10000;
+    static const SKint32      LevelSpeedMax = 1000000;
+    static const SKint32      LevelSpeedMin = 100;
+    static const SKint32      LevelStep     = 10000;
+    static constexpr skScalar NextRectScale = 1.f / 1.75f;
+    static constexpr skScalar FontScale     = 1.f / 17.5f;
+    static constexpr skScalar FontSmScale   = 1.f / 32.5f;
 
     static const SKuint32 Red;
     static const SKuint32 Orange;

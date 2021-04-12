@@ -144,10 +144,15 @@ void Game::handleMouseUp()
     bool handled = false;
     if (!m_dragged && getMouseButton() == MBT_L)
     {
-        if (!m_dragged)
+        if (skRectangle(0, 0, 150, 72).contains(m_lco))
+            popState();
+        else
         {
-            m_board->rotate();
-            handled = true;
+            if (!m_dragged)
+            {
+                m_board->rotate();
+                handled = true;
+            }
         }
     }
 
@@ -168,16 +173,21 @@ void Game::handleMouseMotion()
     {
         const skVector2 mco  = getMouseCo();
         const skVector2 dVec = mco - m_lco;
-        m_lco                = mco;
 
-        const skScalar dLen = .5;
+        m_lco = mco;
+
+        skScalar       dLen = dVec.length();
         const skScalar xDir = dVec.x;
         const skScalar yDir = dVec.y;
-        const skScalar tol  = 3;
+        const skScalar tol  = 1.5;
 
         if (skABS(yDir) > skABS(xDir))
         {
-            if (yDir > tol)
+            dLen /= (skScalar)m_board->getBoardHeight();
+            if (dLen > 1)
+                dLen = 1;
+
+            if (yDir > 2 * tol)
             {
                 m_yStep += dLen;
 
@@ -188,6 +198,10 @@ void Game::handleMouseMotion()
         }
         else
         {
+            dLen /= (skScalar)m_board->getBoardWidth();
+            if (dLen > 1)
+                dLen = 1;
+
             if (xDir > tol)
             {
                 m_xStep += dLen;
@@ -274,34 +288,30 @@ void Game::handleKeyboard()
 
 void Game::calculateBoardSize()
 {
-    // calculate the main rectangle as a ratio from
-    // the window size and the predetermined grid size.
     skVector2 sz;
     skGetContext2f(SK_CONTEXT_SIZE, sz.ptr());
 
-    const skScalar ms = sz.minValue();
+    const skScalar my = sz.y - 96;
 
-    // Center it in The window
-    m_gameRect.setPosition(0, 0);
-    m_gameRect.setSize(ms / skScalar(2.75f), 0);
+    m_gameRect.x = 0;
+    m_gameRect.y = 96;
 
-    // Find the number of blocks that will fit in the width
-    m_blockSize = m_gameRect.width / skScalar(m_board->getBoardWidth());
+    // Find the number of blocks that will fit in the height
+    m_blockSize = my / skScalar(m_board->getBoardHeight() + 3);
 
     /// scale that to the height
     m_gameRect.height = m_blockSize * skScalar(m_board->getBoardHeight());
+    m_gameRect.width  = m_blockSize * skScalar(m_board->getBoardWidth());
 
-    // center it in the window
-    m_gameRect.x = (sz.x - m_gameRect.width) / 2;
-    m_gameRect.y = (sz.y - m_gameRect.height) / 2;
-    m_gameRect.x -= m_blockSize;
+    // center it and The RHS offset in the window
+    m_gameRect.x = (sz.x - (m_gameRect.width + 8 * m_blockSize * Resources::NextRectScale)) / 2;
 
-    const skScalar w = sz.x - m_gameRect.getRight();
+    const skScalar remaining = sz.x - m_gameRect.getRight();
 
-    m_nextRect.width  = 5 * m_blockSize;
+    m_nextRect.width  = 5 * m_blockSize * Resources::NextRectScale;
     m_nextRect.height = m_nextRect.width;
 
-    m_nextRect.x = m_gameRect.getRight() + (w - m_nextRect.width) / 2;
+    m_nextRect.x = m_gameRect.getRight() + (remaining - m_nextRect.width) / 2;
     m_nextRect.y = m_gameRect.y;
 }
 
@@ -344,7 +354,7 @@ void Game::fillBackDrops()
 
     skVector2 sz;
     skGetContext2f(SK_CONTEXT_SIZE, sz.ptr());
-    const skScalar ms = sz.minValue() / 32.f;
+    const skScalar ms = sz.minValue() * R::FontSmScale;
     skSetFont1f(R.Font, SK_FONT_SIZE, ms);
 
     RU::displayDropShadow(R,
@@ -474,5 +484,5 @@ void Game::update()
 
     // fill the screen
     m_board->fill(m_gameRect, m_blockSize);
-    m_board->showNext(m_nextRect, m_blockSize);
+    m_board->showNext(m_nextRect, m_blockSize * Resources::NextRectScale);
 }

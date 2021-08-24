@@ -1,6 +1,6 @@
 # Tetris
 
-Is a Tetris clone written with OpenGL and C++.It was written to provide a more complete working test of the Graphics library refactor, as well as provide a full test for the vs-emscripten tool.  
+Is a Tetris clone written with OpenGL and C++. It was written to provide a more complete working test of the Graphics library refactor, as well as provide a full test for the vs-emscripten tool.  
 
 The initial starter document that was used can be found [here](https://javilop.com/gamedev/tetris-tutorial-in-c-platform-independent-focused-in-game-logic-for-beginners/), 
 which was found via [build-your-own-x](https://github.com/danistefanovic/build-your-own-x).

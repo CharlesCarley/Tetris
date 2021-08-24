@@ -1,11 +1,12 @@
 # Tetris
 
-A Tetris clone written with OpenGL and C++.
+Is a Tetris clone written with OpenGL and C++. 
+
+It was written to provide a more complete working test of the Graphics library refactor, as well as provide a full test for the vs-emscripten tool.  
 
 ![SS01](Resources/Main01.png)
 ![SS02](Resources/Main02.png)
 ![SS02](Resources/Main03.png)
-
 
 
 ## Controls
@@ -25,21 +26,13 @@ A Tetris clone written with OpenGL and C++.
 
 ## Online Version
 
-The online version can be found [here](https://CharlesCarley.github.io/Tetris/index.html).
+The online emscripten version can be found [here](https://CharlesCarley.github.io/Tetris/index.html).
+
+
 
 ## Sub-modules
 
-The files [gitupdate.py](gitupdate.py) or [gitupdate.bat](gitupdate.bat) help automate initial cloning and with keeping the modules up to date.
-
-Once this project has been cloned. The following command will initialize external modules.
-
-```txt
-python gitupdate.py 
-...
-gitupdate.bat 
-```
-
-_*Sub-modules in this project*_
+_*Sub-modules used in this project*_
 
 | Name                                                      | Description                                              |
 |-----------------------------------------------------------|----------------------------------------------------------|

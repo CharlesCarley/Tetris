@@ -1,12 +1,15 @@
 # Tetris
 
-Is a Tetris clone written with OpenGL and C++. 
+Is a Tetris clone written with OpenGL and C++.It was written to provide a more complete working test of the Graphics library refactor, as well as provide a full test for the vs-emscripten tool.  
 
-It was written to provide a more complete working test of the Graphics library refactor, as well as provide a full test for the vs-emscripten tool.  
+The initial starter document that was used can be found [here](https://javilop.com/gamedev/tetris-tutorial-in-c-platform-independent-focused-in-game-logic-for-beginners/), 
+which was found via [build-your-own-x](https://github.com/danistefanovic/build-your-own-x).
 
-![SS01](Resources/Main01.png)
-![SS02](Resources/Main02.png)
-![SS02](Resources/Main03.png)
+
+
+Screen shots of the application: [Title](Resources/Main01.png), [Menu](Resources/Main02.png), [Game](Resources/Main03.png),
+or the [online Emscripten version](https://CharlesCarley.github.io/Tetris/index.html).
+
 
 
 ## Controls
@@ -24,14 +27,9 @@ It was written to provide a more complete working test of the Graphics library r
 | Down             | Drops the current piece.                         |
 | Number pad (-)   | Increments the level.                            |
 
-## Online Version
-
-The online emscripten version can be found [here](https://CharlesCarley.github.io/Tetris/index.html).
-
 
 
 ## Sub-modules
-
 _*Sub-modules used in this project*_
 
 | Name                                                      | Description                                              |
@@ -71,6 +69,6 @@ Optional defines.
 | Tetris_OP_CHECKS           | Extra checks on function parameters                            |   ON    |
 | Tetris_EXTRA_BUILTIN_FONTS | Include extra [fonts](https://fonts.google.com/) in the build. |   OFF   |
 
-## References
 
-The initial starter tutorial that was used can be found [here](https://javilop.com/gamedev/tetris-tutorial-in-c-platform-independent-focused-in-game-logic-for-beginners/)
+
+

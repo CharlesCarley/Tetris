@@ -1,16 +1,12 @@
 # Tetris
 
-Is a Tetris clone written with OpenGL and C++. It was written to provide a more complete working test of the Graphics library refactor, as well as provide a full test for the vs-emscripten tool.  
+Is a Tetris clone written with OpenGL and C++. It was written to provide a more complete working test of a Graphics library refactor, as well as provide a full test for the vs-emscripten tool.  
 
 The initial starter document that was used can be found [here](https://javilop.com/gamedev/tetris-tutorial-in-c-platform-independent-focused-in-game-logic-for-beginners/), 
 which was found via [build-your-own-x](https://github.com/danistefanovic/build-your-own-x).
 
-
-
 Screen shots of the application: [Title](Resources/Main01.png), [Menu](Resources/Main02.png), [Game](Resources/Main03.png),
 or the [online Emscripten version](https://CharlesCarley.github.io/Tetris/index.html).
-
-
 
 ## Controls
 
@@ -46,19 +42,19 @@ _*Sub-modules used in this project*_
 | [SDL](https://github.com/CharlesCarley/SDL)               | Optional Backend for the window library.                 |
 | [Data2Array](https://github.com/CharlesCarley/Data2Array) | Compile time tool to pack resources into the executable. |
 
+
+The file [gitupdate.py](gitupdate.py) will clone the the dependencies and update the sub-modules to the head of the master branch.
+
+
 ## Building
 
-Building with CMake and Make
+It uses CMake to generate its make files. 
 
-```sh
-mkdir build
-cd build
-cmake ..
+It has been tested with CMake's VisualStudio and Unix Makefile generators.   
 
-make
-```
+### Defines 
 
-Optional defines.
+Optional definitions used in this project.
 
 | Option                     | Description                                                    | Default |
 |:---------------------------|:---------------------------------------------------------------|:-------:|
